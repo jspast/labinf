@@ -68,3 +68,6 @@ obj/
 *.bak
 
 # End of https://www.toptal.com/developers/gitignore/api/codeblocks,notepadpp,c
+
+### GNOME Builder ###
+*.build

@@ -124,9 +124,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="src/graphics.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/graphics.h" />
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/menu.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
