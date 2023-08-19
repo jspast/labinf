@@ -1,5 +1,3 @@
-#include "raylib.h"
-
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 

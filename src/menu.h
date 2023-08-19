@@ -8,9 +8,9 @@ typedef struct{
 
 //int MenuInicial();
 
-//int MenuGanhadores();
+int MenuGanhadores();
 
-//int MenuInformacoes();
+int MenuInformacoes();
 
 int Menu();
 

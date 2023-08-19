@@ -1,11 +1,7 @@
 #include "raylib.h"
 #include "menu.h"
 #include "graphics.h"
-
-
-
-#define gameScreenWidth 480
-#define gameScreenHeight 360
+#include "game.h"
 
 int main()
 {
@@ -38,10 +34,30 @@ int main()
 				estado = 0;
             break;
         //------------------------------------------------------------------------------------
+		// NOVO JOGO
+		case 3:
+			if(NovoJogo() == 1)
+				estado = 5;
+            break;
+		//------------------------------------------------------------------------------------
+		// CARREGA JOGO
+		case 4:
+			if(CarregaJogo() == 1)
+				estado = 5;
+            break;
+		//------------------------------------------------------------------------------------
+		// CARREGA JOGO
+		case 5:
+			Jogo();
+            break;
+		//------------------------------------------------------------------------------------
+		// ERRO
+		case -1:
+			FechaJanela();
+			break;
         }
 
 		DesenhaQuadro();
-		//------------------------------------------------------------------------------------
     }
 
 	FechaJanela();

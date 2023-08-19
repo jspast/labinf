@@ -1,6 +1,6 @@
 #include "raylib.h"
 
-#define gameScreenWidth 480
+#define gameScreenWidth 640
 #define gameScreenHeight 360
 #define COR_TITULO WHITE
 #define COR_OPCOES GRAY
@@ -99,6 +99,12 @@ int Menu()
 	int acao;
 
 	switch(MenuInicial()){
+	case 0:
+		acao = 3;
+		break;
+	case 1:
+		acao = 4;
+		break;
 	case 2:
 		acao = 1;
 		break;
