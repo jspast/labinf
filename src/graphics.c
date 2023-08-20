@@ -1,4 +1,4 @@
-#include "raylib.h"
+#include <raylib.h>
 #include "menu.h"
 
 #define MIN(a, b) ((a)<(b)? (a) : (b))

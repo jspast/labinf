@@ -1,4 +1,4 @@
-#include "raylib.h"
+#include <raylib.h>
 
 #define gameScreenWidth 800
 #define gameScreenHeight 480
@@ -37,6 +37,7 @@ int Menu()
 {
 	int acao;
 
+	// Define o retorno para o main
 	switch(MenuInicial()){
 	case 0:
 		acao = 3;
@@ -60,6 +61,7 @@ int Menu()
 	return acao;
 }
 
+// Tela inicial
 int MenuInicial()
 {
 	int menu_acao = -1;
@@ -77,6 +79,7 @@ int MenuInicial()
 	return menu_acao;
 }
 
+// Tela dos ganhadores
 int MenuGanhadores()
 {
 	int sair = 0;
@@ -102,6 +105,7 @@ int MenuGanhadores()
 	return sair;
 }
 
+// Tela das informações
 int MenuInformacoes()
 {
 	int sair = 0;
@@ -121,6 +125,7 @@ int MenuInformacoes()
 	return sair;
 }
 
+// Tela da dificuldade do novo jogo
 int MenuNovoJogo(){
 
 	int dificuldade = -1;
@@ -133,6 +138,7 @@ int MenuNovoJogo(){
 	return dificuldade;
 }
 
+// Gera lista de seleção
 int Selecao(int *opcao_selecionada, int num_opcoes){
 
 	if(IsKeyPressed(KEY_DOWN) && *opcao_selecionada < num_opcoes - 1)
@@ -145,6 +151,7 @@ int Selecao(int *opcao_selecionada, int num_opcoes){
 		return -1;
 }
 
+// Desenha lista de seleção
 void DesenhaOpcoes(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]){
 
 	int posX, posY;

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "raylib.h"
+#include <raylib.h>
 
 #define gameScreenWidth 800
 #define gameScreenHeight 480
@@ -23,9 +23,17 @@ typedef struct{
 	// ...
 } JOGADOR;
 
+int NovoJogo(int dificulade);
+int CarregaJogo();
+int CarregaLabirintos();
+void MovimentacaoJogador();
+void Jogo();
+void DesenhaLabirinto();
+
 LABIRINTO labirintos[MAX_LABIRINTOS];
 JOGADOR jogador;
 
+// Inicia um jogo com a dificuldade fornecida
 int NovoJogo(int dificulade){
 
 	int i;
@@ -42,6 +50,7 @@ int NovoJogo(int dificulade){
 	return 1;
 }
 
+// Inicia um jogo com os parâmetros salvos no arquivo de save
 int CarregaJogo(){
 
 	FILE *arq;
@@ -57,6 +66,7 @@ int CarregaJogo(){
 	return -1;
 }
 
+// Carrega labirintos do arquivo
 int CarregaLabirintos(){
 
 	int num_labirintos = -1;
@@ -96,19 +106,25 @@ void MovimentacaoJogador(){
 	WaitTime(0.05);
 }
 
+// Lógica principal do jogo
 void Jogo(){
-
-	int quadrado_tamanho = 16;
-	int i, j;
-	int exibicaoX = 0;
-	int exibicaoY = 0;
 
 	MovimentacaoJogador();
 
-	exibicaoX = 50 * (jogador.posX / 50);
+	DesenhaLabirinto();
+}
+
+void DesenhaLabirinto(){
+
+	int quadrado_tamanho = 16;
+    int exibicaoX = 0;
+	int exibicaoY = 0;
+    int i, j;
+
+    exibicaoX = 50 * (jogador.posX / 50);
 	exibicaoY = 25 * (jogador.posY / 25);
 
-	for(i = exibicaoX ; i < labirintos[0].tamanho && i < exibicaoX + 50; i++){
+    for(i = exibicaoX ; i < labirintos[0].tamanho && i < exibicaoX + 50; i++){
 		for(j = exibicaoY; j < labirintos[0].tamanho && j < exibicaoY + 25; j++){
             switch(labirintos[0].matriz[i][j]){
             case 0:

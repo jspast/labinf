@@ -1,4 +1,4 @@
-#include "raylib.h"
+#include <raylib.h>
 #include "menu.h"
 #include "graphics.h"
 #include "game.h"
@@ -6,8 +6,7 @@
 int main()
 {
 	int estado = 0;
-
-	int dificuldade = -1;
+	int dificuldade;
 
 	IniciaJanela();
 
