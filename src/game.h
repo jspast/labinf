@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-int NovoJogo();
+int NovoJogo(int dificuldade);
 int CarregaJogo();
 
 int CarregaLabirintos();

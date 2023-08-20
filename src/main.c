@@ -7,6 +7,8 @@ int main()
 {
 	int estado = 0;
 
+	int dificuldade = -1;
+
 	IniciaJanela();
 
 	while(!WindowShouldClose() && estado != -1){
@@ -36,8 +38,11 @@ int main()
         //------------------------------------------------------------------------------------
 		// NOVO JOGO
 		case 3:
-			if(NovoJogo() == 1)
+			dificuldade = (MenuNovoJogo());
+			if(dificuldade != -1){
+				NovoJogo(dificuldade);
 				estado = 5;
+			}
             break;
 		//------------------------------------------------------------------------------------
 		// CARREGA JOGO
@@ -46,7 +51,7 @@ int main()
 				estado = 5;
             break;
 		//------------------------------------------------------------------------------------
-		// CARREGA JOGO
+		// NOVO JOGO
 		case 5:
 			Jogo();
             break;

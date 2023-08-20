@@ -2,16 +2,13 @@
 #define MENU_H
 
 typedef struct{
-	char nome[20];
+	char nome[50];
 	int pontuacao;
 } GANHADOR;
 
-//int MenuInicial();
-
-int MenuGanhadores();
-
-int MenuInformacoes();
-
 int Menu();
+int MenuGanhadores();
+int MenuInformacoes();
+int MenuNovoJogo();
 
 #endif

@@ -13,6 +13,7 @@ typedef struct{
 
 typedef struct{
 	int fase;
+	char dificuldade;
 	// ...
 } SAVE;
 
@@ -25,7 +26,7 @@ typedef struct{
 LABIRINTO labirintos[MAX_LABIRINTOS];
 JOGADOR jogador;
 
-int NovoJogo(){
+int NovoJogo(int dificulade){
 
 	int i;
 
