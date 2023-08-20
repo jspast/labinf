@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "raylib.h"
 
-#define gameScreenWidth 640
-#define gameScreenHeight 360
+#define gameScreenWidth 800
+#define gameScreenHeight 480
 #define MAX_TAMANHO_LABIRINTO 200
 #define MAX_LABIRINTOS 20
 
@@ -105,14 +105,14 @@ void Jogo(){
 
 	MovimentacaoJogador();
 
-	exibicaoX = 40 * (jogador.posX / 40);
-	exibicaoY = 20 * (jogador.posY / 20);
+	exibicaoX = 50 * (jogador.posX / 50);
+	exibicaoY = 25 * (jogador.posY / 25);
 
-	for(i = exibicaoX ; i < labirintos[0].tamanho && i < exibicaoX + 40; i++){
-		for(j = exibicaoY; j < labirintos[0].tamanho && j < exibicaoY + 20; j++){
+	for(i = exibicaoX ; i < labirintos[0].tamanho && i < exibicaoX + 50; i++){
+		for(j = exibicaoY; j < labirintos[0].tamanho && j < exibicaoY + 25; j++){
             switch(labirintos[0].matriz[i][j]){
             case 0:
-                DrawRectangle((i - exibicaoX) * quadrado_tamanho, (j - exibicaoY) * quadrado_tamanho, quadrado_tamanho, quadrado_tamanho, BLACK);
+                DrawRectangle((i - exibicaoX) * quadrado_tamanho, (j - exibicaoY) * quadrado_tamanho, quadrado_tamanho, quadrado_tamanho, DARKGRAY);
                 break;
             case 1:
                 DrawRectangle((i - exibicaoX) * quadrado_tamanho, (j - exibicaoY) * quadrado_tamanho, quadrado_tamanho, quadrado_tamanho, WHITE);

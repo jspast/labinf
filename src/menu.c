@@ -1,7 +1,7 @@
 #include "raylib.h"
 
-#define gameScreenWidth 640
-#define gameScreenHeight 360
+#define gameScreenWidth 800
+#define gameScreenHeight 480
 
 #define COR_TITULO WHITE
 #define COR_OPCOES GRAY
