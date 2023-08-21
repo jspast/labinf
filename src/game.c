@@ -1,10 +1,16 @@
 #include <stdio.h>
 #include <raylib.h>
+#include "menu.h"
 
 #define gameScreenWidth 800
 #define gameScreenHeight 480
+
 #define MAX_TAMANHO_LABIRINTO 200
 #define MAX_LABIRINTOS 20
+
+#define NUM_OPCOES 5
+#define TAM_MAX_OPCOES 18
+
 
 typedef struct{
 	int tamanho;
@@ -29,9 +35,14 @@ int CarregaLabirintos();
 void MovimentacaoJogador();
 void Jogo();
 void DesenhaLabirinto();
+int Pause();
+int ProfessorAoLado();
 
 LABIRINTO labirintos[MAX_LABIRINTOS];
 JOGADOR jogador;
+
+int opcao_selecionada_pause = 0;
+int estado = 0;
 
 // Inicia um jogo com a dificuldade fornecida
 int NovoJogo(int dificulade){
@@ -41,6 +52,7 @@ int NovoJogo(int dificulade){
 	jogador.posX = 1;
 	jogador.posY = 1;
 	labirintos[0].matriz[1][1] = 2;
+	labirintos[0].matriz[10][10] = 3;
 
 	labirintos[0].tamanho = 100;
 
@@ -109,9 +121,35 @@ void MovimentacaoJogador(){
 // Lógica principal do jogo
 void Jogo(){
 
-	MovimentacaoJogador();
+	//-----------------------------------------------------------------------------------
+    // Separa a lógica de cada estado do jogo
+    switch(estado){
+    //-----------------------------------------------------------------------------------
+    // JOGO
+    case 0:
+		MovimentacaoJogador();
+		DesenhaLabirinto();
+		if(IsKeyPressed(KEY_ESCAPE))
+			estado = 1;
+		if(ProfessorAoLado())
+			estado = 2;
+        break;
+    //------------------------------------------------------------------------------------
+    // PAUSE
+    case 1:
+		DesenhaLabirinto();
+		if(IsKeyPressed(KEY_ESCAPE))
+			estado = 0;
+		else
+			estado = Pause();
+        break;
+	//------------------------------------------------------------------------------------
+    // PERGUNTA
+    case 2:
+		DesenhaLabirinto();
 
-	DesenhaLabirinto();
+        break;
+	}
 }
 
 void DesenhaLabirinto(){
@@ -136,9 +174,62 @@ void DesenhaLabirinto(){
 			case 2:
                 DrawRectangle((i - exibicaoX) * quadrado_tamanho, (j - exibicaoY) * quadrado_tamanho, quadrado_tamanho, quadrado_tamanho, ORANGE);
                 break;
+			case 3:
+                DrawRectangle((i - exibicaoX) * quadrado_tamanho, (j - exibicaoY) * quadrado_tamanho, quadrado_tamanho, quadrado_tamanho, RED);
+                break;
+            case 4:
+                DrawRectangle((i - exibicaoX) * quadrado_tamanho, (j - exibicaoY) * quadrado_tamanho, quadrado_tamanho, quadrado_tamanho, BLUE);
+                break;
             }
 		}
     }
 }
 
+int Pause(){
 
+	int acao;
+	char opcoes_pause[NUM_OPCOES][TAM_MAX_OPCOES] = {"Voltar", "Salvar", "Reiniciar", "Novo Jogo", "Sair"};
+
+	// Define o retorno para função Jogo
+	switch(Selecao(&opcao_selecionada_pause, NUM_OPCOES)){
+    // VOLTAR
+	case 0:
+		acao = 0;
+		break;
+	// SALVAR
+	case 1:
+
+		break;
+	// REINICIAR
+	case 2:
+
+		break;
+	// NOVO JOGO
+	case 3:
+
+		break;
+	// SAIR
+	case 4:
+
+		break;
+	// CONTINUA NO PAUSE SE NÃO PRESSIONOU NENHUMA OPÇÃO
+	default:
+		acao = 1;
+	}
+
+	DrawRectangle(gameScreenWidth/2 - 100, gameScreenHeight/2 - 100, 200, 200, BLACK);	// Desenha fundo para as opções de pause
+	DesenhaOpcoes(opcao_selecionada_pause, NUM_OPCOES, opcoes_pause);
+
+	return acao;
+}
+
+int ProfessorAoLado(){
+
+	if (labirintos[0].matriz[jogador.posX][jogador.posY-1] == 3 ||
+		labirintos[0].matriz[jogador.posX][jogador.posY+1] == 3 ||
+		labirintos[0].matriz[jogador.posX-1][jogador.posY] == 3 ||
+		labirintos[0].matriz[jogador.posX+1][jogador.posY] == 3)
+		return 1;
+	else
+		return 0;
+}

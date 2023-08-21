@@ -39,21 +39,27 @@ int Menu()
 
 	// Define o retorno para o main
 	switch(MenuInicial()){
+	// NOVO JOGO
 	case 0:
 		acao = 3;
 		break;
+	// CARREGAR JOGO
 	case 1:
 		acao = 4;
 		break;
+	// EXIBIR GANHADORES
 	case 2:
 		acao = 1;
 		break;
+	// INFORMAÇÕES
 	case 3:
 		acao = 2;
 		break;
+	// SAIR
 	case 4:
 		acao = -1;
 		break;
+	// CONTINUA NO MENU SE NÃO PRESSIONOU NENHUMA OPÇÃO
 	default:
 		acao = 0;
 	}
@@ -67,7 +73,7 @@ int MenuInicial()
 	int menu_acao = -1;
 
 	char titulo[] = {"Os Labirintos do INF"};
-    char opcoes[NUM_OPCOES][18] = {"Novo Jogo","Carregar Jogo","Exibir Ganhadores","Informações","Sair"};
+    char opcoes[NUM_OPCOES][TAM_MAX_OPCOES] = {"Novo Jogo","Carregar Jogo","Exibir Ganhadores","Informações","Sair"};
     Vector2 pos_titulo = {(gameScreenWidth - MeasureText(titulo, FONTE_TITULO))/2, 50};
 
 	menu_acao = Selecao(&opcao_selecionada, NUM_OPCOES);
@@ -90,7 +96,7 @@ int MenuGanhadores()
 
             */
 
-	if(IsKeyReleased(KEY_ENTER))
+	if(IsKeyPressed(KEY_ENTER))
         sair = 1;
 
 	GANHADOR ganhadores[NUM_GANHADORES] = {{"Teste", 20},{"Ok", 10}};
@@ -110,7 +116,7 @@ int MenuInformacoes()
 {
 	int sair = 0;
 
-	if(IsKeyReleased(KEY_ENTER))
+	if(IsKeyPressed(KEY_ENTER))
         sair = 1;
 
 	char informacoes[NUM_INFORMACOES][20] = {"Parede", "Aluno", "Professor", "Colega", "Bomba", "Relógio", "Crédito", "Coração", "Entrada", "Saída"};
@@ -145,7 +151,7 @@ int Selecao(int *opcao_selecionada, int num_opcoes){
     	(*opcao_selecionada)++;
     if(IsKeyPressed(KEY_UP) && *opcao_selecionada > 0)
 		(*opcao_selecionada)--;
-	if(IsKeyReleased(KEY_ENTER))
+	if(IsKeyPressed(KEY_ENTER))
 		return *opcao_selecionada;
 	else
 		return -1;
@@ -159,10 +165,11 @@ void DesenhaOpcoes(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_
 
 	for(i = 0; i < num_opcoes; i++){
 		posX = (gameScreenWidth - MeasureText(opcoes[i], FONTE_OPCOES))/2;
-		posY = (gameScreenHeight - (NUM_OPCOES * FONTE_OPCOES + (NUM_OPCOES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO);
+		posY = (gameScreenHeight - (num_opcoes * FONTE_OPCOES + (num_opcoes - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO);
 		if(opcao_selecionada == i)
     		DrawText(opcoes[i], posX, posY, FONTE_OPCOES, COR_OPCAO_SELECIONADA);
 		else
      		DrawText(opcoes[i], posX, posY, FONTE_OPCOES, COR_OPCOES);
 	}
 }
+
