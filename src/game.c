@@ -11,7 +11,6 @@
 #define NUM_OPCOES 5
 #define TAM_MAX_OPCOES 18
 
-
 typedef struct{
 	int tamanho;
 	char matriz[MAX_TAMANHO_LABIRINTO][MAX_TAMANHO_LABIRINTO];
@@ -33,20 +32,19 @@ int NovoJogo(int dificulade);
 int CarregaJogo();
 int CarregaLabirintos();
 void MovimentacaoJogador();
-void Jogo();
+void Jogo(int *estado);
 void DesenhaLabirinto();
-int Pause();
+int Pause(int *opcao_selecionada);
 int ProfessorAoLado();
 
 LABIRINTO labirintos[MAX_LABIRINTOS];
 JOGADOR jogador;
 
 int opcao_selecionada_pause = 0;
-int estado = 0;
 
 // Inicia um jogo com a dificuldade fornecida
-int NovoJogo(int dificulade){
-
+int NovoJogo(int dificulade)
+{
 	int i;
 
 	jogador.posX = 1;
@@ -63,8 +61,8 @@ int NovoJogo(int dificulade){
 }
 
 // Inicia um jogo com os parâmetros salvos no arquivo de save
-int CarregaJogo(){
-
+int CarregaJogo()
+{
 	FILE *arq;
 	SAVE save;
 
@@ -79,8 +77,8 @@ int CarregaJogo(){
 }
 
 // Carrega labirintos do arquivo
-int CarregaLabirintos(){
-
+int CarregaLabirintos()
+{
 	int num_labirintos = -1;
 	FILE *arq;
 
@@ -98,8 +96,8 @@ int CarregaLabirintos(){
 	return num_labirintos;
 }
 
-void MovimentacaoJogador(){
-
+void MovimentacaoJogador()
+{
 	if (IsKeyDown(KEY_UP) && jogador.posY > 0 && labirintos[0].matriz[jogador.posX][jogador.posY-1] != 1){
 		labirintos[0].matriz[jogador.posX][jogador.posY] = 0;
 		jogador.posY--;
@@ -119,29 +117,31 @@ void MovimentacaoJogador(){
 }
 
 // Lógica principal do jogo
-void Jogo(){
-
+void Jogo(int *estado)
+{
 	//-----------------------------------------------------------------------------------
     // Separa a lógica de cada estado do jogo
-    switch(estado){
+    switch(*estado){
     //-----------------------------------------------------------------------------------
     // JOGO
     case 0:
 		MovimentacaoJogador();
 		DesenhaLabirinto();
-		if(IsKeyPressed(KEY_ESCAPE))
-			estado = 1;
+		if(IsKeyPressed(KEY_ESCAPE)){
+			opcao_selecionada_pause = 0;
+			*estado = 1;
+		}
 		if(ProfessorAoLado())
-			estado = 2;
+			*estado = 2;
         break;
     //------------------------------------------------------------------------------------
     // PAUSE
     case 1:
 		DesenhaLabirinto();
 		if(IsKeyPressed(KEY_ESCAPE))
-			estado = 0;
+			*estado = 0;
 		else
-			estado = Pause();
+			*estado = Pause(&opcao_selecionada_pause);
         break;
 	//------------------------------------------------------------------------------------
     // PERGUNTA
@@ -152,8 +152,8 @@ void Jogo(){
 	}
 }
 
-void DesenhaLabirinto(){
-
+void DesenhaLabirinto()
+{
 	int quadrado_tamanho = 16;
     int exibicaoX = 0;
 	int exibicaoY = 0;
@@ -185,13 +185,13 @@ void DesenhaLabirinto(){
     }
 }
 
-int Pause(){
-
+int Pause(int *opcao_selecionada)
+{
 	int acao;
 	char opcoes_pause[NUM_OPCOES][TAM_MAX_OPCOES] = {"Voltar", "Salvar", "Reiniciar", "Novo Jogo", "Sair"};
 
 	// Define o retorno para função Jogo
-	switch(Selecao(&opcao_selecionada_pause, NUM_OPCOES)){
+	switch(Selecao(opcao_selecionada, NUM_OPCOES)){
     // VOLTAR
 	case 0:
 		acao = 0;
@@ -218,13 +218,13 @@ int Pause(){
 	}
 
 	DrawRectangle(gameScreenWidth/2 - 100, gameScreenHeight/2 - 100, 200, 200, BLACK);	// Desenha fundo para as opções de pause
-	DesenhaOpcoes(opcao_selecionada_pause, NUM_OPCOES, opcoes_pause);
+	DesenhaSelecao(*opcao_selecionada, NUM_OPCOES, opcoes_pause);
 
 	return acao;
 }
 
-int ProfessorAoLado(){
-
+int ProfessorAoLado()
+{
 	if (labirintos[0].matriz[jogador.posX][jogador.posY-1] == 3 ||
 		labirintos[0].matriz[jogador.posX][jogador.posY+1] == 3 ||
 		labirintos[0].matriz[jogador.posX-1][jogador.posY] == 3 ||
@@ -233,3 +233,5 @@ int ProfessorAoLado(){
 	else
 		return 0;
 }
+
+

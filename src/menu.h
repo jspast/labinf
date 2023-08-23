@@ -8,12 +8,12 @@ typedef struct{
 	int pontuacao;
 } GANHADOR;
 
-int Menu();
+int MenuInicial(int *opcao_selecionada);
 int MenuGanhadores();
 int MenuInformacoes();
-int MenuNovoJogo();
+int MenuNovoJogo(int *opcao_selecionada);
 
 int Selecao(int *opcao_selecionada, int num_opcoes);
-void DesenhaOpcoes(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]);
+void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]);
 
 #endif

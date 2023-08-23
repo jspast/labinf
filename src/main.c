@@ -7,6 +7,8 @@ int main()
 {
 	int estado = 0;
 	int dificuldade;
+	int opcao_selecionada = 0;
+	int estado_jogo = 0;
 
 	IniciaJanela();
 
@@ -20,7 +22,7 @@ int main()
         //-----------------------------------------------------------------------------------
         // MENU
         case 0:
-			estado = Menu();
+			estado = MenuInicial(&opcao_selecionada);
             break;
         //------------------------------------------------------------------------------------
         // GANHADORES
@@ -37,7 +39,7 @@ int main()
         //------------------------------------------------------------------------------------
 		// NOVO JOGO
 		case 3:
-			dificuldade = (MenuNovoJogo());
+			dificuldade = (MenuNovoJogo(&opcao_selecionada));
 			if(dificuldade != -1){
 				NovoJogo(dificuldade);
 				estado = 5;
@@ -50,9 +52,9 @@ int main()
 				estado = 5;
             break;
 		//------------------------------------------------------------------------------------
-		// NOVO JOGO
+		// JOGO
 		case 5:
-			Jogo();
+			Jogo(&estado_jogo);
             break;
 		//------------------------------------------------------------------------------------
 		// ERRO

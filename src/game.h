@@ -5,6 +5,6 @@ int NovoJogo(int dificuldade);
 int CarregaJogo();
 
 int CarregaLabirintos();
-void Jogo();
+void Jogo(int *estado);
 
 #endif

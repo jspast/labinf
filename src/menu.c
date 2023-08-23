@@ -23,64 +23,56 @@ typedef struct{
 	int pontuacao;
 } GANHADOR;
 
-int Menu();
-int MenuInicial();
+int MenuInicial(int *opcao_selecionada);
 int MenuGanhadores();
 int MenuInformacoes();
-int MenuNovoJogo();
+int MenuNovoJogo(int *opcao_selecionada);
+
 int Selecao(int *opcao_selecionada, int num_opcoes);
-void DesenhaOpcoes(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]);
-
-int opcao_selecionada = 0;
-
-int Menu()
-{
-	int acao;
-
-	// Define o retorno para o main
-	switch(MenuInicial()){
-	// NOVO JOGO
-	case 0:
-		acao = 3;
-		break;
-	// CARREGAR JOGO
-	case 1:
-		acao = 4;
-		break;
-	// EXIBIR GANHADORES
-	case 2:
-		acao = 1;
-		break;
-	// INFORMAÇÕES
-	case 3:
-		acao = 2;
-		break;
-	// SAIR
-	case 4:
-		acao = -1;
-		break;
-	// CONTINUA NO MENU SE NÃO PRESSIONOU NENHUMA OPÇÃO
-	default:
-		acao = 0;
-	}
-
-	return acao;
-}
+void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]);
 
 // Tela inicial
-int MenuInicial()
+int MenuInicial(int *opcao_selecionada)
 {
-	int menu_acao = -1;
+	int menu_acao;
 
 	char titulo[] = {"Os Labirintos do INF"};
     char opcoes[NUM_OPCOES][TAM_MAX_OPCOES] = {"Novo Jogo","Carregar Jogo","Exibir Ganhadores","Informações","Sair"};
     Vector2 pos_titulo = {(gameScreenWidth - MeasureText(titulo, FONTE_TITULO))/2, 50};
 
-	menu_acao = Selecao(&opcao_selecionada, NUM_OPCOES);
+	menu_acao = Selecao(opcao_selecionada, NUM_OPCOES);
 
     DrawText(titulo, pos_titulo.x, pos_titulo.y, FONTE_TITULO, COR_TITULO);
 
-	DesenhaOpcoes(opcao_selecionada, NUM_OPCOES, opcoes);
+	DesenhaSelecao(*opcao_selecionada, NUM_OPCOES, opcoes);
+
+	// Define o retorno para o main
+	switch(menu_acao){
+	// NOVO JOGO
+	case 0:
+		*opcao_selecionada = 1;
+		menu_acao = 3;
+		break;
+	// CARREGAR JOGO
+	case 1:
+		menu_acao = 4;
+		break;
+	// EXIBIR GANHADORES
+	case 2:
+		menu_acao = 1;
+		break;
+	// INFORMAÇÕES
+	case 3:
+		menu_acao = 2;
+		break;
+	// SAIR
+	case 4:
+		menu_acao = -1;
+		break;
+	// CONTINUA NO MENU SE NÃO PRESSIONOU NENHUMA OPÇÃO
+	default:
+		menu_acao = 0;
+	}
 
 	return menu_acao;
 }
@@ -96,7 +88,7 @@ int MenuGanhadores()
 
             */
 
-	if(IsKeyPressed(KEY_ENTER))
+	if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
         sair = 1;
 
 	GANHADOR ganhadores[NUM_GANHADORES] = {{"Teste", 20},{"Ok", 10}};
@@ -116,7 +108,7 @@ int MenuInformacoes()
 {
 	int sair = 0;
 
-	if(IsKeyPressed(KEY_ENTER))
+	if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
         sair = 1;
 
 	char informacoes[NUM_INFORMACOES][20] = {"Parede", "Aluno", "Professor", "Colega", "Bomba", "Relógio", "Crédito", "Coração", "Entrada", "Saída"};
@@ -132,14 +124,14 @@ int MenuInformacoes()
 }
 
 // Tela da dificuldade do novo jogo
-int MenuNovoJogo(){
+int MenuNovoJogo(int *opcao_selecionada){
 
 	int dificuldade = -1;
 	char dificuldades[3][TAM_MAX_OPCOES] = {"Fácil", "Médio", "Difícil"};
 
-	dificuldade = Selecao(&opcao_selecionada, NUM_DIFICULDADES);
+	dificuldade = Selecao(opcao_selecionada, NUM_DIFICULDADES);
 
-	DesenhaOpcoes(opcao_selecionada, NUM_DIFICULDADES, dificuldades);
+	DesenhaSelecao(*opcao_selecionada, NUM_DIFICULDADES, dificuldades);
 
 	return dificuldade;
 }
@@ -158,7 +150,7 @@ int Selecao(int *opcao_selecionada, int num_opcoes){
 }
 
 // Desenha lista de seleção
-void DesenhaOpcoes(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]){
+void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]){
 
 	int posX, posY;
 	int i;
