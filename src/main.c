@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <time.h>
 #include "menu.h"
 #include "graphics.h"
 #include "game.h"
@@ -9,6 +10,8 @@ int main()
 	int dificuldade;
 	int opcao_selecionada = 0;
 	int estado_jogo = 0;
+
+	SetRandomSeed(srand(time(NULL)));
 
 	IniciaJanela();
 

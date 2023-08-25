@@ -241,13 +241,31 @@ void DirecaoProfessor()
 	int distX;
 	int distY;
 
-	professor.movX = 0;
-	professor.movY = 0;
-
+	// Calcula as distancias X e Y entre o jogador e o professor
 	distX = jogador.pos.x - professor.pos.x;
 	distY = jogador.pos.y - professor.pos.y;
 
-	if(abs(distX) >= abs(distY)){
+	// Se a distancia entre o jogador e o professor for grande
+	if(sqrt(pow(distX, 2) + pow(distY, 2)) > 10){
+        // E se ele ja nao tiver uma direcao, define uma direçao aleatoria para o professor
+        if(professor.movX == 0 && professor.movY == 0)
+            switch(GetRandomValue(0, 3)){
+            case 0:
+                professor.movX = 1;
+                break;
+            case 1:
+                professor.movX = -1;
+                break;
+            case 2:
+                professor.movY = 1;
+                break;
+            case 3:
+                professor.movY = -1;
+                break;
+            }
+    }
+    // Senao, dadas as distancias X e Y, decide a direcao do movimento perseguindo o aluno
+	else if(abs(distX) >= abs(distY)){
 		if(distX > 0){
 			professor.movX = 1;
 		} else {
@@ -262,10 +280,9 @@ void DirecaoProfessor()
 	}
 }
 
-/*
- * Ideia de função recursiva para verificar se há parede entre o professor e o aluno.
- *
-int ProfessorTemVisao()
+
+/* Ideia de função recursiva para verificar se há parede entre o professor e o aluno.
+int ProfessorTemVisao(int posX, int posY)
 {
 	DirecaoProfessor();
 
@@ -295,6 +312,9 @@ void MovimentacaoProfessor()
 		labirintos[0].matriz[professor.pos.x][professor.pos.y] = 0;
 		professor.pos.x += professor.movX;
 	}
+	else
+        professor.movX = 0;
+
 	if(labirintos[0].matriz[professor.pos.x][professor.pos.y + professor.movY] != 1 &&
 	   labirintos[0].matriz[professor.pos.x][professor.pos.y + professor.movY] != 2 &&
 	   professor.pos.y + professor.movY != -1 &&
@@ -303,6 +323,9 @@ void MovimentacaoProfessor()
 		labirintos[0].matriz[professor.pos.x][professor.pos.y] = 0;
 		professor.pos.y += professor.movY;
 	}
+	else
+        professor.movY = 0;
+
 	labirintos[0].matriz[professor.pos.x][professor.pos.y] = 3;
 
 	// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
