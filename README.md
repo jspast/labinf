@@ -22,10 +22,10 @@ Prof. Santiago V. Ravelo
  - [ ] Arquivo de texto das perguntas
 ---
  - [ ] Interface nos labirintos
- - [ ] Menu de pause
+ - [X] Menu de pause
  - [ ] Interface das perguntas
 ---
- - [ ] Aluno/jogador
+ - [X] Aluno/jogador
  - [ ] Professor/guardião
  - [ ] Colega/estáta
 ---
