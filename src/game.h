@@ -4,7 +4,6 @@
 int NovoJogo(int dificuldade);
 int CarregaJogo();
 
-int CarregaLabirintos();
 int Jogo(int *estado);
 
 #endif

@@ -1,7 +1,7 @@
 #include <raylib.h>
 
 #define gameScreenWidth 800
-#define gameScreenHeight 480
+#define gameScreenHeight 450
 
 #define COR_TITULO WHITE
 #define COR_OPCOES GRAY
@@ -163,5 +163,6 @@ void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX
      		DrawText(opcoes[i], posX, posY, FONTE_OPCOES, COR_OPCOES);
 	}
 }
+
 
 
