@@ -12,6 +12,15 @@
 #define NUM_OPCOES 5
 #define TAM_MAX_OPCOES 18
 
+#define MAX_PERGUNTAS 10
+#define NUM_MAX_ALTERNATIVAS 5
+#define TAM_MAX_ALTERNATIVAS 18
+#define TAM_MAX_ENUNCIADO 50
+#define FONTE_ENUNCIADO 30
+#define COR_ENUNCIADO WHITE
+
+#define COR_FUNDO (Color){ 0, 0, 0, 128}
+
 typedef struct{
 	int x;
 	int y;
@@ -42,6 +51,14 @@ typedef struct{
 	// ...
 } PROFESSOR;
 
+typedef struct{
+    char enunciado[TAM_MAX_ENUNCIADO];
+    int num_alternativas;
+    int alternativa_correta;
+    char alternativas[5][TAM_MAX_ALTERNATIVAS];
+} PERGUNTA;
+
+
 int Jogo(int *estado);
 
 int NovoJogo(int dificulade);
@@ -61,7 +78,10 @@ int Pause(int *opcao_selecionada);
 LABIRINTO labirintos[MAX_LABIRINTOS];
 JOGADOR jogador;
 PROFESSOR professor;
+PERGUNTA perguntas[MAX_PERGUNTAS];
+
 int opcao_selecionada_pause = 0;
+int alt_selecionada;
 
 // Lógica principal do jogo
 int Jogo(int *estado)
@@ -76,8 +96,10 @@ int Jogo(int *estado)
     case 0:
 		MovimentacaoJogador();
 		MovimentacaoProfessor();
-		if(ProfessorAoLado())
+		if(ProfessorAoLado()){
 			*estado = 2;
+			alt_selecionada = 0;
+        }
 
 		DesenhaLabirinto();
 		if(IsKeyPressed(KEY_ESCAPE)){
@@ -122,6 +144,21 @@ int Jogo(int *estado)
     // PERGUNTA
     case 2:
 		DesenhaLabirinto();
+		switch(Pergunta(&alt_selecionada)){
+		// Se errou
+		case 0:
+            *estado == 0;
+            break;
+        // Se acertou
+		case 1:
+            *estado == 0;
+            break;
+		// Se nao respondeu ainda
+		default:
+		}
+
+        // remover professor
+        // ...
 
         break;
 	}
@@ -137,9 +174,16 @@ int NovoJogo(int dificulade)
 	jogador.pos.x = 1;
 	jogador.pos.y = 1;
 	labirintos[0].matriz[1][1] = 2;
+
 	professor.pos.x = 10;
 	professor.pos.y = 10;
 	labirintos[0].matriz[10][10] = 3;
+
+	perguntas[0].enunciado[0] = 'A';
+    perguntas[0].num_alternativas = 2;
+    perguntas[0].alternativa_correta = 2;
+    perguntas[0].alternativas[0][0] = '1';
+    perguntas[0].alternativas[1][0] = '2';
 
 	labirintos[0].tamanho = 100;
 
@@ -265,19 +309,23 @@ void DirecaoProfessor()
             }
     }
     // Senao, dadas as distancias X e Y, decide a direcao do movimento perseguindo o aluno
-	else if(abs(distX) >= abs(distY)){
-		if(distX > 0){
-			professor.movX = 1;
-		} else {
-			professor.movX = -1;
-		}
-	} else{
-		if(distY > 0){
-			professor.movY = 1;
-		} else {
-			professor.movY = -1;
-		}
-	}
+    else{
+        professor.movX = 0;
+        professor.movY = 0;
+
+        if(abs(distX) >= abs(distY)){
+            if(distX > 0)
+                professor.movX = 1;
+            else
+                professor.movX = -1;
+        }
+        else{
+            if(distY > 0)
+                professor.movY = 1;
+            else
+                professor.movY = -1;
+        }
+    }
 }
 
 
@@ -386,7 +434,9 @@ int Pause(int *opcao_selecionada)
 
 	acao = Selecao(opcao_selecionada, NUM_OPCOES);
 
-	DrawRectangle(gameScreenWidth/2 - 100, gameScreenHeight/2 - 100, 200, 200, BLACK);	// Desenha fundo para as opções de pause
+	// Desenha fundo para as opções de pause
+	DrawRectangle(gameScreenWidth/2 - 100, gameScreenHeight/2 - 100, 200, 200, COR_FUNDO);
+
 	DesenhaSelecao(*opcao_selecionada, NUM_OPCOES, opcoes_pause);
 
 	// Define o retorno para função Jogo
@@ -414,4 +464,32 @@ int Pause(int *opcao_selecionada)
 	}
 
 	return acao;
+}
+
+int Pergunta(int *alt_selecionada)
+{
+    int resposta;
+    int aleatorio;
+    int acertou = -1;
+
+    // Com o arquivo de perguntas lido, sortear um numero entre 0 e num_perguntas - 1
+    // ...
+    // aleatorio = GetRandomValue(0, num_perguntas - 1);
+    aleatorio = 0;
+
+	resposta = Selecao(alt_selecionada, perguntas[aleatorio].num_alternativas);
+
+	if(resposta == perguntas[aleatorio].alternativa_correta)
+        acertou = 1;
+    else if(resposta != -1)
+        acertou = 0;
+
+	// Desenha fundo para a pergunta
+	DrawRectangle(0, 0, gameScreenWidth, gameScreenHeight, COR_FUNDO);
+
+    DrawText(perguntas[aleatorio].enunciado, (gameScreenWidth - MeasureText(perguntas[aleatorio].enunciado, FONTE_ENUNCIADO))/2, 50, FONTE_ENUNCIADO, COR_ENUNCIADO);
+
+	DesenhaSelecao(*alt_selecionada, perguntas[aleatorio].num_alternativas, perguntas[aleatorio].alternativas);
+
+    return acertou;
 }
