@@ -43,7 +43,6 @@ int MenuInicial(int *opcao_selecionada)
 	menu_acao = Selecao(opcao_selecionada, NUM_OPCOES);
 
     DrawText(titulo, pos_titulo.x, pos_titulo.y, FONTE_TITULO, COR_TITULO);
-
 	DesenhaSelecao(*opcao_selecionada, NUM_OPCOES, opcoes);
 
 	// Define o retorno para o main
@@ -164,4 +163,5 @@ void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX
      		DrawText(opcoes[i], posX, posY, FONTE_OPCOES, COR_OPCOES);
 	}
 }
+
 

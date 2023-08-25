@@ -54,11 +54,11 @@ int main()
 		//------------------------------------------------------------------------------------
 		// JOGO
 		case 5:
-			Jogo(&estado_jogo);
+			estado = Jogo(&estado_jogo);
             break;
 		//------------------------------------------------------------------------------------
-		// ERRO
-		case -1:
+		// ERRO AO LIDAR COM ARQUIVOS
+		case -2:
 			FechaJanela();
 			break;
         }
