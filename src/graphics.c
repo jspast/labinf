@@ -1,23 +1,20 @@
-#include <raylib.h>
-#include "menu.h"
-
-#define MIN(a, b) ((a)<(b)? (a) : (b))
+#include "graphics.h"
 
 RenderTexture2D render;
 
-const int gameScreenWidth = 800; // Resolução de renderização do jogo
-const int gameScreenHeight = 450;
+const int gameScreenWidth = RES_X; // Resolução de renderização do jogo
+const int gameScreenHeight = RES_Y;
 
 void IniciaJanela()
 {
-    const int windowWidth = 800; // Dimensões da janela
-    const int windowHeight = 450;
+    const int windowWidth = RES_X; // Dimensões da janela
+    const int windowHeight = RES_Y;
 
 	// Configura a janela para ser redimensionável e com Vsync
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 
     InitWindow(windowWidth, windowHeight, "Os Labirintos do INF"); // Inicialização da janela
-	SetWindowMinSize(800, 450);
+	SetWindowMinSize(RES_X, RES_Y);
     SetTargetFPS(60);
 
 	// Inicializa a textura de renderização, usada para guardar o resultado da renderização

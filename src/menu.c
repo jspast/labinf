@@ -1,27 +1,4 @@
-#include <raylib.h>
-
-#define gameScreenWidth 800
-#define gameScreenHeight 450
-
-#define COR_TITULO WHITE
-#define COR_OPCOES GRAY
-#define COR_OPCAO_SELECIONADA LIGHTGRAY
-
-#define FONTE_TITULO 30
-#define FONTE_OPCOES 20
-#define ESPACAMENTO (FONTE_OPCOES/2)
-
-#define NUM_OPCOES 5
-#define NUM_INFORMACOES 10
-#define NUM_GANHADORES 10
-#define NUM_DIFICULDADES 3
-
-#define TAM_MAX_OPCOES 18
-
-typedef struct{
-	char nome[50];
-	int pontuacao;
-} GANHADOR;
+#include "menu.h"
 
 int MenuInicial(int *opcao_selecionada);
 int MenuGanhadores();
@@ -38,7 +15,7 @@ int MenuInicial(int *opcao_selecionada)
 
 	char titulo[] = {"Os Labirintos do INF"};
     char opcoes[NUM_OPCOES][TAM_MAX_OPCOES] = {"Novo Jogo","Carregar Jogo","Exibir Ganhadores","Informações","Sair"};
-    Vector2 pos_titulo = {(gameScreenWidth - MeasureText(titulo, FONTE_TITULO))/2, 50};
+    Vector2 pos_titulo = {(RES_X - MeasureText(titulo, FONTE_TITULO))/2, 50};
 
 	menu_acao = Selecao(opcao_selecionada, NUM_OPCOES);
 
@@ -95,8 +72,8 @@ int MenuGanhadores()
 
 	for(i = 0; i < NUM_GANHADORES; i++)
                 DrawText(ganhadores[i].nome,
-						 (gameScreenWidth - MeasureText(ganhadores[i].nome, FONTE_OPCOES))/2,
-						 (gameScreenHeight - (NUM_GANHADORES * FONTE_OPCOES + (NUM_GANHADORES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
+						 (RES_X - MeasureText(ganhadores[i].nome, FONTE_OPCOES))/2,
+						 (RES_Y - (NUM_GANHADORES * FONTE_OPCOES + (NUM_GANHADORES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
 						 FONTE_OPCOES, COR_OPCOES);
 
 	return sair;
@@ -115,8 +92,8 @@ int MenuInformacoes()
 
 	for(i = 0; i < NUM_INFORMACOES; i++)
                 DrawText(informacoes[i],
-						 (gameScreenWidth - MeasureText(informacoes[i], FONTE_OPCOES))/2,
-						 (gameScreenHeight - (NUM_INFORMACOES * FONTE_OPCOES + (NUM_INFORMACOES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
+						 (RES_X - MeasureText(informacoes[i], FONTE_OPCOES))/2,
+						 (RES_Y - (NUM_INFORMACOES * FONTE_OPCOES + (NUM_INFORMACOES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
 						 FONTE_OPCOES, COR_OPCOES);
 
 	return sair;
@@ -155,8 +132,8 @@ void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX
 	int i;
 
 	for(i = 0; i < num_opcoes; i++){
-		posX = (gameScreenWidth - MeasureText(opcoes[i], FONTE_OPCOES))/2;
-		posY = (gameScreenHeight - (num_opcoes * FONTE_OPCOES + (num_opcoes - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO);
+		posX = (RES_X - MeasureText(opcoes[i], FONTE_OPCOES))/2;
+		posY = (RES_Y - (num_opcoes * FONTE_OPCOES + (num_opcoes - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO);
 		if(opcao_selecionada == i)
     		DrawText(opcoes[i], posX, posY, FONTE_OPCOES, COR_OPCAO_SELECIONADA);
 		else

@@ -1,8 +1,4 @@
-#include <raylib.h>
-#include <time.h>
-#include "menu.h"
-#include "graphics.h"
-#include "game.h"
+#include "main.h"
 
 int main()
 {
@@ -10,6 +6,11 @@ int main()
 	int dificuldade;
 	int opcao_selecionada = 0;
 	int estado_jogo = 0;
+
+	JOGADOR jogador = {0};
+	PROFESSOR professores[MAX_PROFESSORES] = {0};
+	LABIRINTO labirinto = {0};
+
 
 	SetRandomSeed(srand(time(NULL)));
 
@@ -44,20 +45,20 @@ int main()
 		case 3:
 			dificuldade = (MenuNovoJogo(&opcao_selecionada));
 			if(dificuldade != -1){
-				NovoJogo(dificuldade);
+				NovoJogo(&jogador, &labirinto, professores, dificuldade);
 				estado = 5;
 			}
             break;
 		//------------------------------------------------------------------------------------
 		// CARREGA JOGO
 		case 4:
-			if(CarregaJogo() == 1)
-				estado = 5;
+			//if(CarregaJogo() == 1)
+			//	estado = 5;
             break;
 		//------------------------------------------------------------------------------------
 		// JOGO
 		case 5:
-			estado = Jogo(&estado_jogo);
+			estado = Jogo(&estado_jogo, &jogador, &labirinto, professores);
             break;
 		//------------------------------------------------------------------------------------
 		// ERRO AO LIDAR COM ARQUIVOS
