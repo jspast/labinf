@@ -24,12 +24,11 @@
 #define INDICADORES_Y 400 + (45 - FONTE_INDICADORES*2)/2
 
 #define DURACAO_FASE 300
+#define MAX_CREDITOS 10
+
+#define MAX_PROFESSORES 6
 
 #define COR_FUNDO (Color){ 0, 0, 0, 128}
-
-typedef struct{
-    double Lifetime;    // Lifetime (seconds)
-} Timer;
 
 typedef struct{
 	int x;
@@ -57,7 +56,7 @@ typedef struct{
 	double cooldown;
 	int vida;
 	double tempo_restante;
-	int creditos_falta;
+	int creditos;
 	int labirinto;
 	int pontuacao;
 } JOGADOR;
@@ -67,7 +66,7 @@ typedef struct{
 	int movX;
 	int movY;
 	double cooldown;
-	// ...
+	int ativo;
 } PROFESSOR;
 
 typedef struct{
@@ -86,26 +85,25 @@ int CarregaJogo();
 int Carregalabirinto();
 
 void MovimentacaoJogador();
-void MovimentacaoProfessor();
-int ProfessorAoLado();
+int AtualizaProfessores();
+void MovimentacaoProfessor(int id);
+int ProfessorAoLado(int id);
 
 void DesenhaLabirinto();
 
 int Pause(int *opcao_selecionada);
 int Pergunta(int *alt_selecionada);
 void DesenhaIndicadores();
-
-void StartTimer(Timer *timer, double lifetime);
-bool TimerDone(Timer* timer);
-void UpdateTimer(Timer* timer);
+void CalculaPontuacao();
 
 
-Timer timer;
 LABIRINTO labirinto;
 JOGADOR jogador;
-PROFESSOR professor;
+PROFESSOR professores[MAX_PROFESSORES];
 PERGUNTA perguntas[MAX_PERGUNTAS];
+SAVE jogo_atual;
 
+double tempo_jogo;
 int opcao_selecionada_pause = 0;
 int alt_selecionada;
 
@@ -120,11 +118,11 @@ int Jogo(int *estado)
     //-----------------------------------------------------------------------------------
     // JOGO
     case 0:
-		UpdateTimer(&timer);
-		jogador.tempo_restante = timer.Lifetime;
+		tempo_jogo += GetFrameTime();
+		jogador.tempo_restante = DURACAO_FASE - tempo_jogo;
 		MovimentacaoJogador();
-		MovimentacaoProfessor();
-		if(ProfessorAoLado()){
+		if(AtualizaProfessores())
+		{
 			*estado = 2;
 			alt_selecionada = 0;
         }
@@ -180,10 +178,12 @@ int Jogo(int *estado)
 		switch(Pergunta(&alt_selecionada)){
 		// Se errou
 		case 0:
+			jogador.vida--;
             *estado = 0;
             break;
         // Se acertou
 		case 1:
+			jogador.creditos++;
             *estado = 0;
             break;
 		// Se nao respondeu ainda
@@ -200,36 +200,31 @@ int Jogo(int *estado)
 	return acao_pause;
 }
 
+void IniciaJogo(SAVE jogo_atual)
+{
+	int i;
+
+	// Posiciona professores no labirinto
+	for(i = 0; i < MAX_PROFESSORES * (1 + jogo_atual.dificuldade)/3; i++){
+		int posX, posY;
+		do{
+		posX = GetRandomValue(0, labirinto.tamX - 1);
+		posY = GetRandomValue(0, labirinto.tamY - 1);
+		} while(labirinto.matriz[posX][posY] != 0);
+		professores[i].ativo = 1;
+		professores[i].pos.x = posX;
+		professores[i].pos.y = posY;
+	}
+}
+
 // Inicia um jogo com a dificuldade fornecida
 int NovoJogo(int dificulade)
 {
-	StartTimer(&timer, DURACAO_FASE);
-
-	// Configura dificuldade
-	switch(dificulade){
-	// FÁCIL
-	case 0:
-		break;
-	// MÉDIO
-	case 1:
-		break;
-	// DIFÍCIL
-	case 2:
-		break;
-	}
-
-	//ConfiguraLabirinto();
-
-
 	int i;
 
 	jogador.pos.x = 1;
 	jogador.pos.y = 1;
 	labirinto.matriz[1][1] = 2;
-
-	professor.pos.x = 10;
-	professor.pos.y = 10;
-	labirinto.matriz[10][10] = 3;
 
 	perguntas[0].enunciado[0] = 'A';
     perguntas[0].num_alternativas = 2;
@@ -242,6 +237,8 @@ int NovoJogo(int dificulade)
 
 	for(i = 0; i < labirinto.tamX; i += 3)
 		labirinto.matriz[i][0] = 1;
+
+	IniciaJogo((SAVE){0, dificulade});
 
 	return 1;
 }
@@ -342,50 +339,50 @@ void MovimentacaoJogador()
 	}
 }
 
-void DirecaoProfessor()
+void DirecaoProfessor(int id)
 {
 	int distX;
 	int distY;
 
 	// Calcula as distancias X e Y entre o jogador e o professor
-	distX = jogador.pos.x - professor.pos.x;
-	distY = jogador.pos.y - professor.pos.y;
+	distX = jogador.pos.x - professores[id].pos.x;
+	distY = jogador.pos.y - professores[id].pos.y;
 
-	// Se a distancia entre o jogador e o professor for grande
+	// Se a distancia entre o jogador e o professores[id] for grande
 	if(sqrt(pow(distX, 2) + pow(distY, 2)) > 10){
         // E se ele ja nao tiver uma direcao, define uma direçao aleatoria para o professor
-        if(professor.movX == 0 && professor.movY == 0)
+        if(professores[id].movX == 0 && professores[id].movY == 0)
             switch(GetRandomValue(0, 3)){
             case 0:
-                professor.movX = 1;
+                professores[id].movX = 1;
                 break;
             case 1:
-                professor.movX = -1;
+                professores[id].movX = -1;
                 break;
             case 2:
-                professor.movY = 1;
+                professores[id].movY = 1;
                 break;
             case 3:
-                professor.movY = -1;
+                professores[id].movY = -1;
                 break;
             }
     }
     // Senao, dadas as distancias X e Y, decide a direcao do movimento perseguindo o aluno
     else{
-        professor.movX = 0;
-        professor.movY = 0;
+        professores[id].movX = 0;
+        professores[id].movY = 0;
 
         if(abs(distX) >= abs(distY)){
             if(distX > 0)
-                professor.movX = 1;
+                professores[id].movX = 1;
             else
-                professor.movX = -1;
+                professores[id].movX = -1;
         }
         else{
             if(distY > 0)
-                professor.movY = 1;
+                professores[id].movY = 1;
             else
-                professor.movY = -1;
+                professores[id].movY = -1;
         }
     }
 }
@@ -408,54 +405,77 @@ int ProfessorTemVisao(int posX, int posY)
 }
 */
 
-void MovimentacaoProfessor()
+int AtualizaProfessores()
 {
-	if(professor.cooldown > 0)
-		professor.cooldown -= GetFrameTime();
+	int perguntar = 0;
+	int i;
+
+	for(i = 0; i < MAX_PROFESSORES; i++){
+		if(professores[i].ativo == 1){
+			MovimentacaoProfessor(i);
+			if(ProfessorAoLado(i)){
+				professores[i].ativo = 0;
+				labirinto.matriz[professores[i].pos.x][professores[i].pos.y] = 0;
+				perguntar = 1;
+			}
+		}
+	}
+	return perguntar;
+}
+
+void MovimentacaoProfessor(int id)
+{
+	if(professores[id].cooldown > 0)
+		professores[id].cooldown -= GetFrameTime();
 	else{
 		// Define a direção da movimentação do professor
-		DirecaoProfessor();
+		DirecaoProfessor(id);
 
 		// Se o movimento for válido, atualiza a matriz com a nova posição do professor
-		if(labirinto.matriz[professor.pos.x + professor.movX][professor.pos.y] != 1 &&
-		   labirinto.matriz[professor.pos.x + professor.movX][professor.pos.y] != 2 &&
-		   professor.pos.x + professor.movX != -1 &&
-		   professor.pos.x + professor.movX != labirinto.tamX)
+		if(labirinto.matriz[professores[id].pos.x + professores[id].movX][professores[id].pos.y] == 0 &&
+		   professores[id].pos.x + professores[id].movX != -1 &&
+		   professores[id].pos.x + professores[id].movX != labirinto.tamX)
 		{
-			labirinto.matriz[professor.pos.x][professor.pos.y] = 0;
-			professor.pos.x += professor.movX;
+			labirinto.matriz[professores[id].pos.x][professores[id].pos.y] = 0;
+			professores[id].pos.x += professores[id].movX;
 		}
 		else
-	        professor.movX = 0;
+	        professores[id].movX = 0;
 
-		if(labirinto.matriz[professor.pos.x][professor.pos.y + professor.movY] != 1 &&
-		   labirinto.matriz[professor.pos.x][professor.pos.y + professor.movY] != 2 &&
-		   professor.pos.y + professor.movY != -1 &&
-		   professor.pos.y + professor.movY != labirinto.tamY)
+		if(labirinto.matriz[professores[id].pos.x][professores[id].pos.y + professores[id].movY] == 0 &&
+		   professores[id].pos.y + professores[id].movY != -1 &&
+		   professores[id].pos.y + professores[id].movY != labirinto.tamY)
 		{
-			labirinto.matriz[professor.pos.x][professor.pos.y] = 0;
-			professor.pos.y += professor.movY;
+			labirinto.matriz[professores[id].pos.x][professores[id].pos.y] = 0;
+			professores[id].pos.y += professores[id].movY;
 		}
 		else
-	        professor.movY = 0;
+	        professores[id].movY = 0;
 
-		labirinto.matriz[professor.pos.x][professor.pos.y] = 3;
+		labirinto.matriz[professores[id].pos.x][professores[id].pos.y] = 3;
 
 		// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
-		professor.cooldown = 0.03;
+		professores[id].cooldown = 0.03;
 	}
 }
 
 // Verifica se o professor está em um bloco adjacente ao jogador
-int ProfessorAoLado()
+int ProfessorAoLado(int id)
 {
-	if (labirinto.matriz[jogador.pos.x][jogador.pos.y-1] == 3 ||
-		labirinto.matriz[jogador.pos.x][jogador.pos.y+1] == 3 ||
-		labirinto.matriz[jogador.pos.x-1][jogador.pos.y] == 3 ||
-		labirinto.matriz[jogador.pos.x+1][jogador.pos.y] == 3)
-		return 1;
-	else
-		return 0;
+	int ao_lado = 0;
+
+	if(professores[id].pos.x+1 == jogador.pos.x ||
+	   professores[id].pos.x == jogador.pos.x ||
+	   professores[id].pos.x-1 == jogador.pos.x)
+	{
+		if(professores[id].pos.y+1 == jogador.pos.y ||
+		   professores[id].pos.y == jogador.pos.y ||
+		   professores[id].pos.y-1 == jogador.pos.y)
+		{
+		   ao_lado = 1;
+		}
+	}
+	return ao_lado;
 }
 
 // Renderização da matriz principal do jogo
@@ -545,7 +565,7 @@ int Pergunta(int *alt_selecionada)
 
 	resposta = Selecao(alt_selecionada, perguntas[aleatorio].num_alternativas);
 
-	if(resposta == perguntas[aleatorio].alternativa_correta)
+	if(resposta == perguntas[aleatorio].alternativa_correta - 1)
         acertou = 1;
     else if(resposta != -1)
         acertou = 0;
@@ -560,36 +580,18 @@ int Pergunta(int *alt_selecionada)
     return acertou;
 }
 
-void DesenhaIndicadores(){
+void DesenhaIndicadores()
+{
+	void CalculaPontuacao();
 
 	DrawText(TextFormat("Vida:\n\n%d", jogador.vida), 10, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
 	DrawText(TextFormat("Tempo\n\n%4.2f", jogador.tempo_restante), 120, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
-	DrawText(TextFormat("Créditos:\n\n%d", jogador.creditos_falta), 260, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
+	DrawText(TextFormat("Créditos:\n\n%d/%d", jogador.creditos, MAX_CREDITOS), 260, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
 	DrawText(TextFormat("Labirinto:\n\n%d", jogador.labirinto), 440, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
 	DrawText(TextFormat("Pontuação:\n\n%d", jogador.pontuacao), 620, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
 }
 
-// Funções de Timer
-// start or restart a timer with a specific lifetime
-void StartTimer(Timer* timer, double lifetime)
+void CalculaPontuacao()
 {
-    if (timer != NULL)
-        timer->Lifetime = lifetime;
-}
-
-// update a timer with the current frame time
-void UpdateTimer(Timer* timer)
-{
-    // subtract this frame from the timer if it's not allready expired
-    if (timer != NULL && timer->Lifetime > 0)
-        timer->Lifetime -= GetFrameTime();
-}
-
-// check if a timer is done.
-bool TimerDone(Timer* timer)
-{
-    if (timer != NULL)
-        return timer->Lifetime <= 0;
-
-	return false;
+	jogador.pontuacao = 10 * MAX_CREDITOS * jogador.labirinto * jogador.creditos / tempo_jogo;
 }
