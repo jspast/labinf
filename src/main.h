@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <raylib.h>
+#include <stdio.h>
 #include <time.h>
 #include "menu.h"
 #include "graphics.h"

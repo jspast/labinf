@@ -2,15 +2,19 @@
 #define GAME_H
 
 #include "main.h"
-
-#define NUM_MAX_ALTERNATIVAS 5
-#define TAM_MAX_ALTERNATIVAS 18
-#define TAM_MAX_ENUNCIADO 50
+#include <math.h>
 
 #define MAX_PROFESSORES 6
 
 #define MAX_TAMANHO_LABIRINTO 100
 
+#define NUM_MAX_ALTERNATIVAS 5
+#define TAM_MAX_ALTERNATIVAS 18
+#define TAM_MAX_ENUNCIADO 50
+#define MAX_PERGUNTAS 100
+#define FONTE_ENUNCIADO 30
+#define COR_ENUNCIADO WHITE
+#define COR_FUNDO (Color){ 0, 0, 0, 128}
 
 typedef struct{
 	int x;
@@ -73,12 +77,14 @@ typedef struct{
 int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
 int CarregaJogo();
 
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[]);
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas);
 
 void MovimentacaoJogador(JOGADOR *jogador, FASE *fase);
 int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador);
-void CarregaFase(FASE *fase_atual, int num_fase);
+int CarregaFase(FASE *fase_atual, int num_fase);
 
+int CarregaPerguntas(PERGUNTA perguntas[]);
+int Pergunta(PERGUNTA perguntas[], int num_perguntas, int *alt_selecionada);
 
 #endif

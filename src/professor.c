@@ -5,6 +5,7 @@ int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 int ProfessorAoLado(int id, PROFESSOR professores[], JOGADOR jogador);
 
+// Define a direção de movimento do professor
 void DirecaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador)
 {
 	int distX;
@@ -16,7 +17,7 @@ void DirecaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador)
 
 	// Se a distancia entre o jogador e o professores[id] for grande
 	if(sqrt(pow(distX, 2) + pow(distY, 2)) > 10){
-        // E se ele ja nao tiver uma direcao, define uma direçao aleatoria para o professor
+        // E se ele já não tiver uma direção, define uma direção aleatória para o professor
         if(professores[id].movX == 0 && professores[id].movY == 0)
             switch(GetRandomValue(0, 3)){
             case 0:
@@ -33,7 +34,7 @@ void DirecaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador)
                 break;
             }
     }
-    // Senao, dadas as distancias X e Y, decide a direcao do movimento perseguindo o aluno
+    // Senão, dadas as distancias X e Y, decide a direção do movimento perseguindo o aluno
     else{
         professores[id].movX = 0;
         professores[id].movY = 0;
@@ -71,6 +72,7 @@ int ProfessorTemVisao(int posX, int posY)
 }
 */
 
+// Lógica completa dos professores, atualiza os ativos
 int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase)
 {
 	int perguntar = 0;
@@ -89,8 +91,10 @@ int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase)
 	return perguntar;
 }
 
+// Mecânica da movimentação do professor
 void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FASE *fase)
 {
+	// Verifica se já passou tempo suficiente desde o último movimento
 	if(professores[id].cooldown > 0)
 		professores[id].cooldown -= GetFrameTime();
 	else{

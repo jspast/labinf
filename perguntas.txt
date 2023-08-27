@@ -1,0 +1,13 @@
+Onde nasceu Santiago?
+4 1
+Cuba
+Brasil
+Mexico
+Argentina
+Qual o melhor professor?
+5 1
+Santiago
+Ribas
+Leila
+Dennis
+Afonso Barranova

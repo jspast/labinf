@@ -10,8 +10,16 @@ int main()
     FASE fase_atual;
 	JOGADOR jogador = {0};
 	PROFESSOR professores[MAX_PROFESSORES] = {0};
+	PERGUNTA perguntas[MAX_PERGUNTAS];
+	int num_perguntas;
 
+	// Define a seed dos números aleatórios
 	SetRandomSeed(srand(time(NULL)));
+
+	// Carrega as perguntas do arquivo guardando o número de perguntas
+	num_perguntas = CarregaPerguntas(perguntas);
+	if(!num_perguntas)
+		estado = -2;
 
 	IniciaJanela();
 
@@ -44,9 +52,10 @@ int main()
 		case 3:
 			dificuldade = (MenuNovoJogo(&opcao_selecionada));
 			if(dificuldade != -1){
-                CarregaFase(&fase_atual, 0);
-				NovoJogo(&jogador, &fase_atual, professores, dificuldade);
-				estado = 5;
+				if(NovoJogo(&jogador, &fase_atual, professores, dificuldade))
+					estado = 5;
+				else
+					estado = -2;
 			}
             break;
 		//------------------------------------------------------------------------------------
@@ -58,12 +67,14 @@ int main()
 		//------------------------------------------------------------------------------------
 		// JOGO
 		case 5:
-			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores);
+			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas);
             break;
 		//------------------------------------------------------------------------------------
 		// ERRO AO LIDAR COM ARQUIVOS
 		case -2:
-			FechaJanela();
+			DrawText("Erro ao lidar com arquivos", RES_X/4, RES_Y/2, 30, WHITE);
+			if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
+				estado = -1;
 			break;
         }
 

@@ -1,9 +1,11 @@
 #include "game.h"
 
+// Mecânica da movimentação do jogador
 void MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
 {
 	char ultimo_mov;
 
+	// Verifica se já passou tempo suficiente desde o último movimento
 	if(jogador->cooldown > 0)
 		jogador->cooldown -= GetFrameTime();
 	else{

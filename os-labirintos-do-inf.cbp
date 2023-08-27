@@ -146,6 +146,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/menu.h" />
+		<Unit filename="src/perguntas.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/professor.c">
 			<Option compilerVar="CC" />
 		</Unit>
