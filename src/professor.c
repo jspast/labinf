@@ -1,8 +1,8 @@
 #include "game.h"
 
 void DirecaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador);
-int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, LABIRINTO *labirinto);
-void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, LABIRINTO *labirinto);
+int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
+void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 int ProfessorAoLado(int id, PROFESSOR professores[], JOGADOR jogador);
 
 void DirecaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador)
@@ -71,17 +71,17 @@ int ProfessorTemVisao(int posX, int posY)
 }
 */
 
-int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, LABIRINTO *labirinto)
+int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase)
 {
 	int perguntar = 0;
 	int i;
 
 	for(i = 0; i < MAX_PROFESSORES; i++){
 		if(professores[i].ativo == 1){
-			MovimentacaoProfessor(i, professores, jogador, labirinto);
+			MovimentacaoProfessor(i, professores, jogador, fase);
 			if(ProfessorAoLado(i, professores, jogador)){
 				professores[i].ativo = 0;
-				labirinto->matriz[professores[i].pos.x][professores[i].pos.y] = 0;
+				fase->labirinto.m[professores[i].pos.x][professores[i].pos.y] = 0;
 				perguntar = 1;
 			}
 		}
@@ -89,7 +89,7 @@ int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, LABIRINTO *lab
 	return perguntar;
 }
 
-void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, LABIRINTO *labirinto)
+void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FASE *fase)
 {
 	if(professores[id].cooldown > 0)
 		professores[id].cooldown -= GetFrameTime();
@@ -98,27 +98,27 @@ void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, LAB
 		DirecaoProfessor(id, professores, jogador);
 
 		// Se o movimento for válido, atualiza a matriz com a nova posição do professor
-		if(labirinto->matriz[professores[id].pos.x + professores[id].movX][professores[id].pos.y] == 0 &&
+		if(fase->labirinto.m[professores[id].pos.x + professores[id].movX][professores[id].pos.y] == 0 &&
 		   professores[id].pos.x + professores[id].movX != -1 &&
-		   professores[id].pos.x + professores[id].movX != labirinto->tamX)
+		   professores[id].pos.x + professores[id].movX != fase->labirinto.tamX)
 		{
-			labirinto->matriz[professores[id].pos.x][professores[id].pos.y] = 0;
+			fase->labirinto.m[professores[id].pos.x][professores[id].pos.y] = 0;
 			professores[id].pos.x += professores[id].movX;
 		}
 		else
 	        professores[id].movX = 0;
 
-		if(labirinto->matriz[professores[id].pos.x][professores[id].pos.y + professores[id].movY] == 0 &&
+		if(fase->labirinto.m[professores[id].pos.x][professores[id].pos.y + professores[id].movY] == 0 &&
 		   professores[id].pos.y + professores[id].movY != -1 &&
-		   professores[id].pos.y + professores[id].movY != labirinto->tamY)
+		   professores[id].pos.y + professores[id].movY != fase->labirinto.tamY)
 		{
-			labirinto->matriz[professores[id].pos.x][professores[id].pos.y] = 0;
+			fase->labirinto.m[professores[id].pos.x][professores[id].pos.y] = 0;
 			professores[id].pos.y += professores[id].movY;
 		}
 		else
 	        professores[id].movY = 0;
 
-		labirinto->matriz[professores[id].pos.x][professores[id].pos.y] = 3;
+		fase->labirinto.m[professores[id].pos.x][professores[id].pos.y] = 3;
 
 		// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
 		professores[id].cooldown = 0.03;

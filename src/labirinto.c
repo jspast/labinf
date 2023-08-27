@@ -1,8 +1,14 @@
+#include <stdio.h>
 #include "game.h"
 
-void DesenhaLabirinto();
+#define MAX_TAMANHO_LABIRINTO 100
+#define NUM_DIFICULDADES 3
 
-// Carrega enésimo labirinto do arquivo
+void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador);
+void CarregaFase(FASE *fase_atual, int num_fase);
+
+
+// Carrega enésimo labirinto do arquivo -> a CarregaFase já está fazendo isso!
 /*
 int CarregaLabirinto(int n)
 {
@@ -23,6 +29,22 @@ int CarregaLabirinto(int n)
 }
 */
 
+// Preenche a fase atual com os dados do arquivo de labirintos
+void CarregaFase(FASE *fase_atual, int num_fase) {
+    int ajuste_lab, num_lab;
+    int m, n;
+    FILE *arqlab;
+
+    arqlab = fopen("labirintos.dat", "rb");
+
+    ajuste_lab = sizeof(LABIRINTO)*num_fase;
+    fseek(arqlab, ajuste_lab, 0);
+
+    fread(&fase_atual->labirinto, sizeof(LABIRINTO), 1, arqlab);
+
+    fclose(arqlab);
+}
+
 // Renderização da matriz principal do jogo
 void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador)
 {
@@ -36,7 +58,7 @@ void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador)
 
     for(i = exibicaoX ; i < labirinto.tamX && i < exibicaoX + 50; i++){
 		for(j = exibicaoY; j < labirinto.tamY && j < exibicaoY + 25; j++){
-            switch(labirinto.matriz[i][j]){
+            switch(labirinto.m[i][j]){
             case 0:
                 DrawRectangle((i - exibicaoX) * quadrado_tamanho, (j - exibicaoY) * quadrado_tamanho, quadrado_tamanho, quadrado_tamanho, DARKGRAY);
                 break;

@@ -9,13 +9,18 @@
 
 #define MAX_PROFESSORES 6
 
-#define MAX_TAMANHO_LABIRINTO 200
+#define MAX_TAMANHO_LABIRINTO 100
 
 
 typedef struct{
 	int x;
 	int y;
 } POSICAO;
+
+typedef struct{
+	int inic_x, fim_x;
+	int inic_y, fim_y;
+} SAIDA;
 
 typedef struct{
 	POSICAO pos;
@@ -37,13 +42,20 @@ typedef struct{
 	int ativo;
 } PROFESSOR;
 
-typedef struct{
+typedef struct {
 	int tamX;
 	int tamY;
 	POSICAO entrada;
-	POSICAO saida;
-	char matriz[MAX_TAMANHO_LABIRINTO][MAX_TAMANHO_LABIRINTO];
+	SAIDA saida;
+	int m[MAX_TAMANHO_LABIRINTO][MAX_TAMANHO_LABIRINTO];
 } LABIRINTO;
+
+typedef struct{
+	double max_tempo;
+	int max_professores;
+	int min_creditos;
+	LABIRINTO labirinto;
+} FASE;
 
 typedef struct{
 	int fase;
@@ -58,15 +70,15 @@ typedef struct{
     char alternativas[NUM_MAX_ALTERNATIVAS][TAM_MAX_ALTERNATIVAS];
 } PERGUNTA;
 
-int NovoJogo(JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professores[], int dificulade);
+int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
 int CarregaJogo();
 
-int Jogo(int *estado, JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professores[]);
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[]);
 
-void MovimentacaoJogador(JOGADOR *jogador, LABIRINTO *labirinto);
-int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, LABIRINTO *labirinto);
+void MovimentacaoJogador(JOGADOR *jogador, FASE *fase);
+int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador);
-
+void CarregaFase(FASE *fase_atual, int num_fase);
 
 
 #endif

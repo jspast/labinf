@@ -7,10 +7,9 @@ int main()
 	int opcao_selecionada = 0;
 	int estado_jogo = 0;
 
+    FASE fase_atual;
 	JOGADOR jogador = {0};
 	PROFESSOR professores[MAX_PROFESSORES] = {0};
-	LABIRINTO labirinto = {0};
-
 
 	SetRandomSeed(srand(time(NULL)));
 
@@ -45,7 +44,8 @@ int main()
 		case 3:
 			dificuldade = (MenuNovoJogo(&opcao_selecionada));
 			if(dificuldade != -1){
-				NovoJogo(&jogador, &labirinto, professores, dificuldade);
+                CarregaFase(&fase_atual, 0);
+				NovoJogo(&jogador, &fase_atual, professores, dificuldade);
 				estado = 5;
 			}
             break;
@@ -58,7 +58,7 @@ int main()
 		//------------------------------------------------------------------------------------
 		// JOGO
 		case 5:
-			estado = Jogo(&estado_jogo, &jogador, &labirinto, professores);
+			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores);
             break;
 		//------------------------------------------------------------------------------------
 		// ERRO AO LIDAR COM ARQUIVOS

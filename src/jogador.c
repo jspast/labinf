@@ -1,6 +1,6 @@
 #include "game.h"
 
-void MovimentacaoJogador(JOGADOR *jogador, LABIRINTO *labirinto)
+void MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
 {
 	char ultimo_mov;
 
@@ -36,19 +36,19 @@ void MovimentacaoJogador(JOGADOR *jogador, LABIRINTO *labirinto)
 		}
 
 		// Se o movimento for válido, atualiza a matriz com a nova posição do jogador
-		if(labirinto->matriz[jogador->pos.x + jogador->movX][jogador->pos.y] != 1 &&
-		   jogador->pos.x + jogador->movX != -1 && jogador->pos.x + jogador->movX != labirinto->tamX)
+		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y] != 1 &&
+		   jogador->pos.x + jogador->movX != -1 && jogador->pos.x + jogador->movX != fase->labirinto.tamX)
 		{
-			labirinto->matriz[jogador->pos.x][jogador->pos.y] = 0;
+			fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 0;
 			jogador->pos.x += jogador->movX;
 		}
-		if(labirinto->matriz[jogador->pos.x][jogador->pos.y + jogador->movY] != 1 &&
-		   jogador->pos.y + jogador->movY != -1 && jogador->pos.y + jogador->movY != labirinto->tamY)
+		if(fase->labirinto.m[jogador->pos.x][jogador->pos.y + jogador->movY] != 1 &&
+		   jogador->pos.y + jogador->movY != -1 && jogador->pos.y + jogador->movY != fase->labirinto.tamY)
 		{
-			labirinto->matriz[jogador->pos.x][jogador->pos.y] = 0;
+			fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 0;
 			jogador->pos.y += jogador->movY;
 		}
-		labirinto->matriz[jogador->pos.x][jogador->pos.y] = 2;
+		fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 2;
 
 		// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
 		jogador->cooldown = 0.05;

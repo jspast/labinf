@@ -20,11 +20,11 @@
 #define COR_FUNDO (Color){ 0, 0, 0, 128}
 
 
-int Jogo(int *estado, JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professores[]);
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[]);
 
-int NovoJogo(JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professores[], int dificulade);
+int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
 int CarregaJogo();
-void IniciaJogo(LABIRINTO *labirinto, PROFESSOR professores[], SAVE jogo_atual);
+void IniciaJogo(FASE *fase, PROFESSOR professores[], SAVE jogo_atual);
 
 int Pause(int *opcao_selecionada);
 int Pergunta(int *alt_selecionada);
@@ -39,7 +39,7 @@ int opcao_selecionada_pause = 0;
 int alt_selecionada;
 
 // Lógica principal do jogo
-int Jogo(int *estado, JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professores[])
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[])
 {
 	int acao_pause = 5;
 
@@ -50,15 +50,15 @@ int Jogo(int *estado, JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professo
     // JOGO
     case 0:
 		tempo_jogo += GetFrameTime();
-		jogador->tempo_restante = DURACAO_FASE - tempo_jogo;
-		MovimentacaoJogador(jogador, labirinto);
-		if(AtualizaProfessores(professores, *jogador, labirinto))
+		jogador->tempo_restante = fase->max_tempo - tempo_jogo;
+		MovimentacaoJogador(jogador, fase);
+		if(AtualizaProfessores(professores, *jogador, fase))
 		{
 			*estado = 2;
 			alt_selecionada = 0;
         }
 
-		DesenhaLabirinto(*labirinto, *jogador);
+		DesenhaLabirinto(fase->labirinto, *jogador);
 		DesenhaIndicadores(*jogador);
 
 		if(IsKeyPressed(KEY_ESCAPE)){
@@ -69,7 +69,7 @@ int Jogo(int *estado, JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professo
     //------------------------------------------------------------------------------------
     // PAUSE
     case 1:
-		DesenhaLabirinto(*labirinto, *jogador);
+		DesenhaLabirinto(fase->labirinto, *jogador);
 		DesenhaIndicadores(*jogador);
 
 		if(IsKeyPressed(KEY_ESCAPE))
@@ -103,7 +103,7 @@ int Jogo(int *estado, JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professo
 	//------------------------------------------------------------------------------------
     // PERGUNTA
     case 2:
-		DesenhaLabirinto(*labirinto, *jogador);
+		DesenhaLabirinto(fase->labirinto, *jogador);
 		DesenhaIndicadores(*jogador);
 
 		switch(Pergunta(&alt_selecionada)){
@@ -128,17 +128,22 @@ int Jogo(int *estado, JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professo
 	return acao_pause;
 }
 
-void IniciaJogo(LABIRINTO *labirinto, PROFESSOR professores[], SAVE jogo_atual)
+void IniciaJogo(FASE *fase, PROFESSOR professores[], SAVE jogo_atual)
 {
 	int i;
 
+	// Ajusta os parametros da fase conforme número e dificuldade escolhida
+	fase->max_tempo = DURACAO_FASE - (jogo_atual.fase + jogo_atual.dificuldade)*20;
+	fase->max_professores = MAX_PROFESSORES * (1 + jogo_atual.dificuldade)/3;
+	fase->min_creditos = MAX_CREDITOS + (jogo_atual.fase + jogo_atual.dificuldade);
+
 	// Posiciona professores no labirinto
-	for(i = 0; i < MAX_PROFESSORES * (1 + jogo_atual.dificuldade)/3; i++){
+	for(i = 0; i < fase->max_professores; i++){
 		int posX, posY;
 		do{
-		posX = GetRandomValue(0, labirinto->tamX - 1);
-		posY = GetRandomValue(0, labirinto->tamY - 1);
-		} while(labirinto->matriz[posX][posY] != 0);
+		posX = GetRandomValue(0, fase->labirinto.tamX - 1);
+		posY = GetRandomValue(0, fase->labirinto.tamY - 1);
+		} while(fase->labirinto.m[posX][posY] != 0);
 		professores[i].ativo = 1;
 		professores[i].pos.x = posX;
 		professores[i].pos.y = posY;
@@ -146,13 +151,11 @@ void IniciaJogo(LABIRINTO *labirinto, PROFESSOR professores[], SAVE jogo_atual)
 }
 
 // Inicia um jogo com a dificuldade fornecida
-int NovoJogo(JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professores[], int dificulade)
+int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade)
 {
-	int i;
-
-	jogador->pos.x = 1;
-	jogador->pos.y = 1;
-	labirinto->matriz[1][1] = 2;
+	jogador->pos.x = fase->labirinto.entrada.x;
+	jogador->pos.y = fase->labirinto.entrada.y;
+	fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 2;
 
 	perguntas[0].enunciado[0] = 'A';
     perguntas[0].num_alternativas = 2;
@@ -160,13 +163,7 @@ int NovoJogo(JOGADOR *jogador, LABIRINTO *labirinto, PROFESSOR professores[], in
     perguntas[0].alternativas[0][0] = '1';
     perguntas[0].alternativas[1][0] = '2';
 
-	labirinto->tamX = 100;
-	labirinto->tamY = 50;
-
-	for(i = 0; i < labirinto->tamX; i += 3)
-		labirinto->matriz[i][0] = 1;
-
-	IniciaJogo(labirinto, professores, (SAVE){0, dificulade});
+	IniciaJogo(fase, professores, (SAVE){0, dificuldade});
 
 	return 1;
 }
