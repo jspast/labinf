@@ -14,4 +14,6 @@ void FechaJanela();
 void IniciaQuadro();
 void DesenhaQuadro();
 
+void CarregaTexturas(Texture2D texturas[]);
+
 #endif

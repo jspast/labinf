@@ -12,7 +12,7 @@
 #define DURACAO_FASE 300
 #define MAX_CREDITOS 10
 
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas);
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[]);
 
 int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
 int CarregaJogo();
@@ -29,7 +29,7 @@ int opcao_selecionada = 0;
 int pergunta_aleatoria;
 
 // Lógica principal do jogo
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas)
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[])
 {
 	int acao_pause = 5;
 
@@ -51,7 +51,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			*estado = 2;
         }
 
-		DesenhaLabirinto(fase->labirinto, *jogador);
+		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase);
 
 		if(IsKeyPressed(KEY_ESCAPE)){
@@ -62,7 +62,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
     //------------------------------------------------------------------------------------
     // PAUSE
     case 1:
-		DesenhaLabirinto(fase->labirinto, *jogador);
+		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase);
 
 		if(IsKeyPressed(KEY_ESCAPE))
@@ -98,7 +98,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	//------------------------------------------------------------------------------------
     // PERGUNTA
     case 2:
-		DesenhaLabirinto(fase->labirinto, *jogador);
+		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase);
 
 		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){

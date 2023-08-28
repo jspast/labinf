@@ -1,5 +1,7 @@
 #include "graphics.h"
 
+#define COR_TELA (Color){71, 45, 60, 255}
+
 RenderTexture2D render;
 
 const int gameScreenWidth = RES_X; // Resolução de renderização do jogo
@@ -38,7 +40,7 @@ void FechaJanela()
 void IniciaQuadro()
 {
     BeginTextureMode(render); // Desenha tudo na textura renderização
-    ClearBackground(BLACK); // Limpa a tela e define cor de fundo
+    ClearBackground(COR_TELA); // Limpa a tela e define cor de fundo
 }
 
 void DesenhaQuadro()
@@ -57,4 +59,13 @@ void DesenhaQuadro()
                 (float)gameScreenWidth*scale, (float)gameScreenHeight*scale }, (Vector2){ 0, 0 }, 0.0f, WHITE);
 
     EndDrawing(); // Finaliza o ambiente de desenho na tela
+}
+
+void CarregaTexturas(Texture2D texturas[]){
+
+	texturas[0] = LoadTexture("res/parede.png");
+	texturas[1] = LoadTexture("res/aluno.png");
+	texturas[2] = LoadTexture("res/professor.png");
+	texturas[3] = LoadTexture("res/colega.png");
+	texturas[4] = LoadTexture("res/credito.png");
 }

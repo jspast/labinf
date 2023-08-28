@@ -6,7 +6,7 @@
 #define BLOCOS_Y 25
 #define TAM_BLOCO 16
 
-void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador);
+void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador, Texture2D texturas[]);
 int CarregaFase(FASE *fase_atual, int num_fase);
 
 // Preenche a fase atual com os dados do arquivo de labirintos
@@ -30,7 +30,7 @@ int CarregaFase(FASE *fase_atual, int num_fase)
 }
 
 // Renderização da matriz principal do jogo
-void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador)
+void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador, Texture2D texturas[])
 {
     int exibicaoX = 0;
 	int exibicaoY = 0;
@@ -45,19 +45,9 @@ void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador)
 		for(j = exibicaoY; j < labirinto.tamY && j < exibicaoY + BLOCOS_Y; j++){
             switch(labirinto.m[i][j]){
             case 0:
-                DrawRectangle((i - exibicaoX) * TAM_BLOCO, (j - exibicaoY) * TAM_BLOCO, TAM_BLOCO, TAM_BLOCO, DARKGRAY);
                 break;
-            case 1:
-                DrawRectangle((i - exibicaoX) * TAM_BLOCO, (j - exibicaoY) * TAM_BLOCO, TAM_BLOCO, TAM_BLOCO, WHITE);
-                break;
-			case 2:
-                DrawRectangle((i - exibicaoX) * TAM_BLOCO, (j - exibicaoY) * TAM_BLOCO, TAM_BLOCO, TAM_BLOCO, ORANGE);
-                break;
-			case 3:
-                DrawRectangle((i - exibicaoX) * TAM_BLOCO, (j - exibicaoY) * TAM_BLOCO, TAM_BLOCO, TAM_BLOCO, RED);
-                break;
-            case 4:
-                DrawRectangle((i - exibicaoX) * TAM_BLOCO, (j - exibicaoY) * TAM_BLOCO, TAM_BLOCO, TAM_BLOCO, BLUE);
+            default:
+				DrawTexture(texturas[(labirinto.m[i][j] - 1)], (i - exibicaoX) * TAM_BLOCO, (j - exibicaoY) * TAM_BLOCO, WHITE);
                 break;
             }
 		}

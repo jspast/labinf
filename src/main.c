@@ -23,6 +23,9 @@ int main()
 
 	IniciaJanela();
 
+	Texture2D texturas[NUM_TEXTURAS];
+	CarregaTexturas(texturas);
+
 	while(!WindowShouldClose() && estado != -1){
 
 		IniciaQuadro();
@@ -67,7 +70,7 @@ int main()
 		//------------------------------------------------------------------------------------
 		// JOGO
 		case 5:
-			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas);
+			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas);
             break;
 		//------------------------------------------------------------------------------------
 		// ERRO AO LIDAR COM ARQUIVOS

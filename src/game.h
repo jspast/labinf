@@ -4,6 +4,8 @@
 #include "main.h"
 #include <math.h>
 
+#define NUM_TEXTURAS 10
+
 #define MAX_PROFESSORES 6
 
 #define MAX_TAMANHO_LABIRINTO 100
@@ -77,11 +79,11 @@ typedef struct{
 int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
 int CarregaJogo();
 
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas);
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[]);
 
 void MovimentacaoJogador(JOGADOR *jogador, FASE *fase);
 int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
-void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador);
+void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador, Texture2D texturas[]);
 int CarregaFase(FASE *fase_atual, int num_fase);
 
 int CarregaPerguntas(PERGUNTA perguntas[]);
