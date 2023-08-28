@@ -17,16 +17,16 @@ Prof. Santiago V. Ravelo
  - [ ] Ganhadores
 ---
  - [ ] Arquivo binário de save
- - [ ] Arquivo binário dos labirintos
+ - [x] Arquivo binário dos labirintos
  - [ ] Arquivo binário das estátuas
- - [ ] Arquivo de texto das perguntas
+ - [x] Arquivo de texto das perguntas
 ---
- - [ ] Interface nos labirintos
+ - [x] Interface nos labirintos
  - [X] Menu de pause
- - [ ] Interface das perguntas
+ - [x] Interface das perguntas
 ---
  - [X] Aluno/jogador
- - [ ] Professor/guardião
+ - [x] Professor/guardião
  - [ ] Colega/estáta
 ---
  - [ ] Bomba
@@ -34,7 +34,7 @@ Prof. Santiago V. Ravelo
  - [ ] Coração
 ---
  - [ ] Pontuação
- - [ ] Níveis de dificuldade
+ - [x] Níveis de dificuldade
 ---
 
 ## Documentação:
