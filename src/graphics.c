@@ -1,6 +1,7 @@
 #include "graphics.h"
 
-#define COR_TELA (Color){71, 45, 60, 255}
+#define COR_TELA BLACK
+//#define COR_TELA (Color){71, 45, 60, 255} // Cor "original" do fundo dos sprites
 
 RenderTexture2D render;
 
