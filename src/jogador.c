@@ -1,8 +1,9 @@
 #include "game.h"
 
 // Mecânica da movimentação do jogador
-void MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
+bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
 {
+	bool perguntar = false;
 	char ultimo_mov;
 
 	// Verifica se já passou tempo suficiente desde o último movimento
@@ -37,17 +38,21 @@ void MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
 				jogador->movY = 0;
 		}
 
+		// Se o jogador ocupará a posição de um crédito após o movimento, aumentar em 1 o número de créditos
+		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 5)
+			jogador->creditos++;
+
+		// Se o jogador ocupará a posição de uma estátua após o movimento, chamar a pergunta
+		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 4)
+			perguntar = true;
+
 		// Se o movimento for válido, atualiza a matriz com a nova posição do jogador
-		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y] != 1 &&
-		   jogador->pos.x + jogador->movX != -1 && jogador->pos.x + jogador->movX != fase->labirinto.tamX)
-		{
-			fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 0;
-			jogador->pos.x += jogador->movX;
-		}
-		if(fase->labirinto.m[jogador->pos.x][jogador->pos.y + jogador->movY] != 1 &&
+		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] != 1 &&
+		   jogador->pos.x + jogador->movX != -1 && jogador->pos.x + jogador->movX != fase->labirinto.tamX &&
 		   jogador->pos.y + jogador->movY != -1 && jogador->pos.y + jogador->movY != fase->labirinto.tamY)
 		{
 			fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 0;
+			jogador->pos.x += jogador->movX;
 			jogador->pos.y += jogador->movY;
 		}
 		fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 2;
@@ -55,4 +60,5 @@ void MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
 		// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
 		jogador->cooldown = 0.05;
 	}
+	return perguntar;
 }

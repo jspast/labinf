@@ -8,6 +8,7 @@
 #define INDICADORES_Y 405
 #define INDICADORES_Y2 INDICADORES_Y + FONTE_INDICADORES
 
+#define NUM_COLEGAS 3
 #define MAX_VIDA 2
 #define DURACAO_FASE 300
 #define MAX_CREDITOS 10
@@ -43,7 +44,15 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		tempo_jogo += GetFrameTime();
 		jogador->tempo_restante = fase->max_tempo - tempo_jogo;
 
-		MovimentacaoJogador(jogador, fase);
+		// Verifica se, na movimentação, o jogador encostou num colega
+		if(MovimentacaoJogador(jogador, fase))
+		{
+			pergunta_aleatoria = GetRandomValue(0, num_perguntas - 1);
+			opcao_selecionada = 0;
+			*estado = 3;
+        }
+
+		// Verifica se, na atualização, um professor encostou no jogador
 		if(AtualizaProfessores(professores, *jogador, fase))
 		{
 			pergunta_aleatoria = GetRandomValue(0, num_perguntas - 1);
@@ -96,7 +105,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		}
         break;
 	//------------------------------------------------------------------------------------
-    // PERGUNTA
+    // PERGUNTA PROFESSOR
     case 2:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase);
@@ -115,8 +124,33 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		// Se não respondeu ainda
 		default:
 			*estado = 2;
+			break;
 		}
+		break;
+	//------------------------------------------------------------------------------------
+    // PERGUNTA COLEGA
+    case 3:
+		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
+		DesenhaIndicadores(*jogador, *fase);
 
+		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
+		// Se errou
+		case 0:
+            *estado = 0;
+            break;
+        // Se acertou
+		case 1:
+			// Recompensa por ajudar o colega
+			// bomba, relógio ou vida
+			// ...
+			jogador->vida++;
+            *estado = 0;
+            break;
+		// Se não respondeu ainda
+		default:
+			*estado = 3;
+			break;
+		}
         break;
 	}
 
@@ -155,6 +189,27 @@ int IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_
 			professores[i].pos.x = posX;
 			professores[i].pos.y = posY;
 		}
+
+		// Posiciona colegas no labirinto
+		for(i = 0; i < NUM_COLEGAS; i++){
+			int posX, posY;
+			do{
+			posX = GetRandomValue(0, fase->labirinto.tamX - 1);
+			posY = GetRandomValue(0, fase->labirinto.tamY - 1);
+			} while(fase->labirinto.m[posX][posY] != 0);
+			fase->labirinto.m[posX][posY] = 4;
+		}
+
+		// Posiciona créditos no labirinto
+		for(i = 0; i < fase->min_creditos; i++){
+			int posX, posY;
+			do{
+			posX = GetRandomValue(0, fase->labirinto.tamX - 1);
+			posY = GetRandomValue(0, fase->labirinto.tamY - 1);
+			} while(fase->labirinto.m[posX][posY] != 0);
+			fase->labirinto.m[posX][posY] = 5;
+		}
+
 		return 1;
 	}
 }
