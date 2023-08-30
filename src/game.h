@@ -67,7 +67,6 @@ typedef struct{
 typedef struct{
 	int fase;
 	char dificuldade;
-	// ...
 } SAVE;
 
 typedef struct{
@@ -77,12 +76,13 @@ typedef struct{
     char alternativas[NUM_MAX_ALTERNATIVAS][TAM_MAX_ALTERNATIVAS];
 } PERGUNTA;
 
-bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
-int CarregaJogo();
+bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual);
+bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual);
 
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[]);
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE jogo_atual);
 
 bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase);
+void JogarBomba(JOGADOR *jogador, FASE *fase);
 bool AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 
 bool CarregaFase(FASE *fase_atual, int num_fase);

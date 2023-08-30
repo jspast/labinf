@@ -11,23 +11,23 @@
 #define NUM_COLEGAS 3
 #define MAX_VIDA 2
 #define DURACAO_FASE 300
-#define MAX_CREDITOS 10
+#define MIN_CREDITOS 10
+#define MAX_CREDITOS 21
 
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
+bool SalvarJogo(SAVE jogo_atual);
 
 int Pause(int *opcao_selecionada);
 void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[]);
 void CalculaPontuacao(JOGADOR jogador);
 void RecompensaColega(JOGADOR *jogador);
 
-SAVE jogo_atual;
-
 double tempo_jogo;
 int opcao_selecionada = 0;
 int pergunta_aleatoria;
 
 // Lógica principal do jogo
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[])
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE jogo_atual)
 {
 	int acao_pause = 5;
 
@@ -40,6 +40,9 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		// Calcula o tempo de jogo
 		tempo_jogo += GetFrameTime();
 		jogador->tempo_restante = fase->max_tempo - tempo_jogo;
+
+		if(IsKeyPressed(KEY_SPACE) && jogador->bombas > 0)
+			JogarBomba(jogador, fase);
 
 		// Verifica se, na movimentação, o jogador encostou num colega
 		if(MovimentacaoJogador(jogador, fase))
@@ -85,14 +88,14 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		// Se a opção pressionada foi salvar
 		case 1:
 			acao_pause = 5;
-			// ...
+			SalvarJogo(jogo_atual); // Por enquanto não verifica se conseguiu salvar
+			*estado = 1;
 			break;
 		// Se a opção pressionada foi reiniciar
 		case 2:
 			*estado = 0;
 			acao_pause = 5;
 			IniciaFase(fase, jogador, professores, jogo_atual);
-			// ...
 			break;
 		// Se a opção pressionada foi novo jogo
 		case 3:
@@ -172,7 +175,7 @@ bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo
 		// Ajusta os parâmetros da fase conforme número e dificuldade escolhida
 		fase->max_tempo = DURACAO_FASE - (jogo_atual.fase + jogo_atual.dificuldade)*20;
 		fase->max_professores = MAX_PROFESSORES * (1 + jogo_atual.dificuldade)/3;
-		fase->min_creditos = MAX_CREDITOS + (jogo_atual.fase + jogo_atual.dificuldade);
+		fase->min_creditos = MIN_CREDITOS + (jogo_atual.fase + jogo_atual.dificuldade);
 
 		// Posiciona professores no labirinto
 		for(i = 0; i < fase->max_professores; i++){
@@ -211,33 +214,42 @@ bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo
 }
 
 // Inicia um jogo com a dificuldade fornecida
-bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade)
+bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual)
 {
-	jogo_atual.fase = 0;
-	jogo_atual.dificuldade = dificuldade;
+	jogo_atual->fase = 0;
+	jogo_atual->dificuldade = dificuldade;
 
-	return IniciaFase(fase, jogador, professores, jogo_atual);
+	return IniciaFase(fase, jogador, professores, *jogo_atual);
 }
 
 // Inicia um jogo com os parâmetros salvos no arquivo de save
-/*
-int CarregaJogo()
+
+bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual)
 {
 	FILE *arq;
-	SAVE save;
 
     arq = fopen("save.dat","rb");
     if(arq == NULL)
-		{}
-    else{
-		fread(&save, sizeof(SAVE), 1, arq);
-	}
- 	IniciaFase(...);
+		return false;
+    else
+		fread(jogo_atual, sizeof(SAVE), 1, arq);
 
-	return -1;
+	return IniciaFase(fase, jogador, professores, *jogo_atual);
 
 }
-*/
+
+bool SalvarJogo(SAVE jogo_atual)
+{
+	FILE *arq;
+
+	arq = fopen("save.dat", "wb");
+	if(arq == NULL)
+		return false;
+	else
+		fwrite(&jogo_atual, sizeof(SAVE), 1, arq);
+
+	return true;
+}
 
 // Lógica do menu de pause
 int Pause(int *opcao_selecionada)

@@ -25,17 +25,23 @@ void IniciaJanela()
     render = LoadRenderTexture(gameScreenWidth, gameScreenHeight);
     SetTextureFilter(render.texture, TEXTURE_FILTER_POINT);
 
-	SetExitKey(KEY_NULL); // Garante que nenhuma tecla fecha o jogo diretamente)
+	SetExitKey(KEY_NULL); // Garante que nenhuma tecla fecha o jogo diretamente
 
     HideCursor();
-    InitAudioDevice();
+    //InitAudioDevice();
+
+	// Define o icone do jogo no sistema operacional
+	Image icon = LoadImage("res/aluno.png");
+	ImageFormat(&icon, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+	SetWindowIcon(icon);
+	UnloadImage(icon);
 }
 
 void FechaJanela()
 {
 	UnloadRenderTexture(render); // Descarrega a textura de renderização
 	CloseWindow();
-	CloseAudioDevice();
+	//CloseAudioDevice();
 }
 
 void IniciaQuadro()
@@ -71,4 +77,27 @@ void CarregaTexturas(Texture2D texturas[]){
 	texturas[4] = LoadTexture("res/credito.png");
 	texturas[5] = LoadTexture("res/bomba.png");
 	texturas[6] = LoadTexture("res/saida.png");
+}
+
+void FechaTexturas(Texture2D texturas[]){
+
+	int i;
+
+	for(i = 0; i < 6; i++)
+		UnloadTexture(texturas[i]);
+}
+
+void TelaCheia()
+{
+ 	if (IsKeyPressed(KEY_F11))
+	{
+		int display = GetCurrentMonitor();
+
+        if (IsWindowFullscreen())
+        	SetWindowSize(RES_X, RES_Y);
+    	else
+        	SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+
+ 	ToggleFullscreen();
+	}
 }

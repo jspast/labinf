@@ -62,3 +62,17 @@ bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
 	}
 	return perguntar;
 }
+
+void JogarBomba(JOGADOR *jogador, FASE *fase)
+{
+	int i, j;
+
+	jogador->bombas--;
+
+	for(i = jogador->pos.x - 1; i <= jogador->pos.x + 1; i++){
+		for(j = jogador->pos.y - 1; j <= jogador->pos.y + 1; j++){
+			if(fase->labirinto.m[i][j] == 1)
+				fase->labirinto.m[i][j] = 0;
+		}
+	}
+}

@@ -11,6 +11,7 @@ int main()
 	JOGADOR jogador = {0};
 	PROFESSOR professores[MAX_PROFESSORES] = {0};
 	PERGUNTA perguntas[MAX_PERGUNTAS];
+	SAVE jogo_atual;
 	int num_perguntas;
 
 	// Define a seed dos números aleatórios
@@ -29,6 +30,9 @@ int main()
 	while(!WindowShouldClose() && estado != -1){
 
 		IniciaQuadro();
+
+		// Verifica se é para mudar para tela cheia
+		TelaCheia();
 
 		//-----------------------------------------------------------------------------------
         // Separa a lógica de cada estado do jogo
@@ -55,7 +59,7 @@ int main()
 		case 3:
 			dificuldade = (MenuNovoJogo(&opcao_selecionada));
 			if(dificuldade != -1){
-				if(NovoJogo(&jogador, &fase_atual, professores, dificuldade))
+				if(NovoJogo(&jogador, &fase_atual, professores, dificuldade, &jogo_atual))
 					estado = 5;
 				else
 					estado = -2;
@@ -64,13 +68,15 @@ int main()
 		//------------------------------------------------------------------------------------
 		// CARREGA JOGO
 		case 4:
-			//if(CarregaJogo() == 1)
-			//	estado = 5;
+			if(CarregaJogo(&jogador, &fase_atual, professores, &jogo_atual))
+				estado = 5;
+			else
+				estado = -2;
             break;
 		//------------------------------------------------------------------------------------
 		// JOGO
 		case 5:
-			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas);
+			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas, jogo_atual);
             break;
 		//------------------------------------------------------------------------------------
 		// ERRO AO LIDAR COM ARQUIVOS
@@ -84,6 +90,8 @@ int main()
 		DesenhaQuadro();
     }
 
+	FechaTexturas(texturas);
 	FechaJanela();
+
     return 0;
 }
