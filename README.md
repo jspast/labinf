@@ -13,12 +13,13 @@ Prof. Santiago V. Ravelo
 ## ToDo:
 
  - [X] Menu inicial 
- - [ ] Informações
- - [ ] Ganhadores
+ - [x] Informações
+ - [x] Ganhadores
 ---
  - [ ] Arquivo binário de save
  - [x] Arquivo binário dos labirintos
  - [ ] Arquivo binário das estátuas
+ - [ ] Arquivo binário dos ganhadores
  - [x] Arquivo de texto das perguntas
 ---
  - [x] Interface nos labirintos
