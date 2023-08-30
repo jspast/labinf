@@ -27,12 +27,12 @@ Prof. Santiago V. Ravelo
 ---
  - [X] Aluno/jogador
  - [x] Professor/guardião
- - [ ] Colega/estáta
+ - [x] Colega/estáta
 ---
  - [ ] Bomba
- - [ ] Crédito
- - [ ] Coração
+ - [x] Crédito
 ---
+ - [ ] Saída do labirinto
  - [ ] Pontuação
  - [x] Níveis de dificuldade
 ---
