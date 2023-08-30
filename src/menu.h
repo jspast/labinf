@@ -10,10 +10,11 @@
 #define FONTE_TITULO 30
 #define FONTE_OPCOES 20
 #define ESPACAMENTO (FONTE_OPCOES/2)
+#define ESPACAMENTO_INFORMACOES 32
 
 #define TAM_MAX_OPCOES 18
 #define NUM_OPCOES 5
-#define NUM_INFORMACOES 10
+#define NUM_INFORMACOES 7
 #define NUM_GANHADORES 10
 #define NUM_DIFICULDADES 3
 
@@ -24,7 +25,7 @@ typedef struct{
 
 int MenuInicial(int *opcao_selecionada);
 bool MenuGanhadores();
-bool MenuInformacoes();
+bool MenuInformacoes(Texture2D texturas[]);
 int MenuNovoJogo(int *opcao_selecionada);
 
 int Selecao(int *opcao_selecionada, int num_opcoes);

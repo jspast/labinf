@@ -69,4 +69,6 @@ void CarregaTexturas(Texture2D texturas[]){
 	texturas[2] = LoadTexture("res/professor.png");
 	texturas[3] = LoadTexture("res/colega.png");
 	texturas[4] = LoadTexture("res/credito.png");
+	texturas[5] = LoadTexture("res/bomba.png");
+	texturas[6] = LoadTexture("res/saida.png");
 }

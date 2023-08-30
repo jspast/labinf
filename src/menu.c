@@ -62,32 +62,38 @@ bool MenuGanhadores()
 	GANHADOR ganhadores[NUM_GANHADORES] = {{"Teste", 20},{"Ok", 10}};
 	int i;
 
-	for(i = 0; i < NUM_GANHADORES; i++)
-                DrawText(ganhadores[i].nome,
-						 (RES_X - MeasureText(ganhadores[i].nome, FONTE_OPCOES))/2,
-						 (RES_Y - (NUM_GANHADORES * FONTE_OPCOES + (NUM_GANHADORES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
-						 FONTE_OPCOES, COR_OPCOES);
-
+	for(i = 0; i < NUM_GANHADORES; i++){
+		DrawText(TextFormat("%d", ganhadores[i].pontuacao),
+			50,
+			(RES_Y - (NUM_GANHADORES * FONTE_OPCOES + (NUM_GANHADORES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
+			FONTE_OPCOES, LIGHTGRAY);
+        DrawText(ganhadores[i].nome,
+			200,
+			(RES_Y - (NUM_GANHADORES * FONTE_OPCOES + (NUM_GANHADORES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
+			FONTE_OPCOES, LIGHTGRAY);
+	}
 	return sair;
 }
 
 // Tela das informações
-bool MenuInformacoes()
+bool MenuInformacoes(Texture2D texturas[])
 {
 	bool sair = false;
 
 	if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
         sair = true;
 
-	char informacoes[NUM_INFORMACOES][20] = {"Parede", "Aluno", "Professor", "Colega", "Bomba", "Relógio", "Crédito", "Coração", "Entrada", "Saída"};
+	char informacoes[NUM_INFORMACOES][20] = {"Parede", "Aluno", "Professor", "Colega", "Crédito", "Bomba", "Saída"};
 	int i;
 
-	for(i = 0; i < NUM_INFORMACOES; i++)
-                DrawText(informacoes[i],
-						 (RES_X - MeasureText(informacoes[i], FONTE_OPCOES))/2,
-						 (RES_Y - (NUM_INFORMACOES * FONTE_OPCOES + (NUM_INFORMACOES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
-						 FONTE_OPCOES, COR_OPCOES);
-
+	for(i = 0; i < NUM_INFORMACOES; i++){
+		DrawTexture(texturas[i], RES_X/2 - 32,
+					(RES_Y - (NUM_INFORMACOES * FONTE_OPCOES + (NUM_INFORMACOES - 1) * ESPACAMENTO_INFORMACOES))/2 + i * (FONTE_OPCOES + ESPACAMENTO_INFORMACOES),
+					WHITE);
+		DrawText(informacoes[i], RES_X/2,
+				 (RES_Y - (NUM_INFORMACOES * FONTE_OPCOES + (NUM_INFORMACOES - 1) * ESPACAMENTO_INFORMACOES))/2 + i * (FONTE_OPCOES + ESPACAMENTO_INFORMACOES),
+				 FONTE_OPCOES, LIGHTGRAY);
+	}
 	return sair;
 }
 

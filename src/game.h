@@ -38,6 +38,7 @@ typedef struct{
 	int creditos;
 	int labirinto;
 	int pontuacao;
+        int bombas;
 } JOGADOR;
 
 typedef struct{

@@ -16,8 +16,9 @@
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
 
 int Pause(int *opcao_selecionada);
-void DesenhaIndicadores(JOGADOR jogador, FASE fase);
+void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[]);
 void CalculaPontuacao(JOGADOR jogador);
+void RecompensaColega(JOGADOR *jogador);
 
 SAVE jogo_atual;
 
@@ -57,7 +58,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
         }
 
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase);
+		DesenhaIndicadores(*jogador, *fase, texturas);
 
 		if(IsKeyPressed(KEY_ESCAPE)){
 			opcao_selecionada = 0;
@@ -68,7 +69,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
     // PAUSE
     case 1:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase);
+		DesenhaIndicadores(*jogador, *fase, texturas);
 
 		if(IsKeyPressed(KEY_ESCAPE))
 			*estado = 0;
@@ -104,7 +105,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
     // PERGUNTA PROFESSOR
     case 2:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase);
+		DesenhaIndicadores(*jogador, *fase, texturas);
 
 		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
 		// Se errou
@@ -127,7 +128,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
     // PERGUNTA COLEGA
     case 3:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase);
+		DesenhaIndicadores(*jogador, *fase, texturas);
 
 		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
 		// Se errou
@@ -138,8 +139,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		case 1:
 			// Recompensa por ajudar o colega
 			// bomba, relógio ou vida
-			// ...
-			jogador->vida++;
+			RecompensaColega(jogador);
             *estado = 0;
             break;
 		// Se não respondeu ainda
@@ -280,8 +280,10 @@ int Pause(int *opcao_selecionada)
 }
 
 // Desenha a HUD com as informações do jogador e da fase
-void DesenhaIndicadores(JOGADOR jogador, FASE fase)
+void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[])
 {
+	int i;
+
 	CalculaPontuacao(jogador);
 
 	DrawText("Vida:", 10, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
@@ -300,6 +302,8 @@ void DesenhaIndicadores(JOGADOR jogador, FASE fase)
 	DrawText(TextFormat("%d", jogador.pontuacao), 480, INDICADORES_Y2, FONTE_INDICADORES, COR_INDICADORES);
 
 	DrawText("Inventário:", 640, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
+	for(i = 0; i < jogador.bombas; i++)
+		DrawTexture(texturas[5], 640 + (i * 16), INDICADORES_Y2, WHITE);
 }
 
 // Calcula a pontuação total acumulada pelo aluno
@@ -308,3 +312,18 @@ void CalculaPontuacao(JOGADOR jogador)
 	jogador.pontuacao = 10 * MAX_CREDITOS * jogador.labirinto * jogador.creditos / tempo_jogo;
 }
 
+// Define uma recompensa aleatória ao jogador por salvar o colega
+void RecompensaColega(JOGADOR *jogador){
+
+	switch(GetRandomValue(0, 2)){
+            case 0:
+				jogador->vida++;
+                break;
+            case 1:
+                jogador->tempo_restante += 20;
+                break;
+            case 2:
+                jogador->bombas++;
+                break;
+    }
+}
