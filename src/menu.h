@@ -23,8 +23,8 @@ typedef struct{
 } GANHADOR;
 
 int MenuInicial(int *opcao_selecionada);
-int MenuGanhadores();
-int MenuInformacoes();
+bool MenuGanhadores();
+bool MenuInformacoes();
 int MenuNovoJogo(int *opcao_selecionada);
 
 int Selecao(int *opcao_selecionada, int num_opcoes);

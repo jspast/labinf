@@ -76,15 +76,16 @@ typedef struct{
     char alternativas[NUM_MAX_ALTERNATIVAS][TAM_MAX_ALTERNATIVAS];
 } PERGUNTA;
 
-int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
+bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
 int CarregaJogo();
 
 int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[]);
 
 bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase);
-int AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
+bool AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
+
+bool CarregaFase(FASE *fase_atual, int num_fase);
 void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador, Texture2D texturas[]);
-int CarregaFase(FASE *fase_atual, int num_fase);
 
 int CarregaPerguntas(PERGUNTA perguntas[]);
 int Pergunta(PERGUNTA perguntas[], int num_perguntas, int *alt_selecionada);

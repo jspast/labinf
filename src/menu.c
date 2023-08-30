@@ -1,13 +1,5 @@
 #include "menu.h"
 
-int MenuInicial(int *opcao_selecionada);
-int MenuGanhadores();
-int MenuInformacoes();
-int MenuNovoJogo(int *opcao_selecionada);
-
-int Selecao(int *opcao_selecionada, int num_opcoes);
-void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX_OPCOES]);
-
 // Tela inicial
 int MenuInicial(int *opcao_selecionada)
 {
@@ -54,9 +46,9 @@ int MenuInicial(int *opcao_selecionada)
 }
 
 // Tela dos ganhadores
-int MenuGanhadores()
+bool MenuGanhadores()
 {
-	int sair = 0;
+	bool sair = false;
 
             /*
 
@@ -65,7 +57,7 @@ int MenuGanhadores()
             */
 
 	if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
-        sair = 1;
+        sair = true;
 
 	GANHADOR ganhadores[NUM_GANHADORES] = {{"Teste", 20},{"Ok", 10}};
 	int i;
@@ -80,12 +72,12 @@ int MenuGanhadores()
 }
 
 // Tela das informações
-int MenuInformacoes()
+bool MenuInformacoes()
 {
-	int sair = 0;
+	bool sair = false;
 
 	if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
-        sair = 1;
+        sair = true;
 
 	char informacoes[NUM_INFORMACOES][20] = {"Parede", "Aluno", "Professor", "Colega", "Bomba", "Relógio", "Crédito", "Coração", "Entrada", "Saída"};
 	int i;
@@ -140,6 +132,3 @@ void DesenhaSelecao(int opcao_selecionada, int num_opcoes, char opcoes[][TAM_MAX
      		DrawText(opcoes[i], posX, posY, FONTE_OPCOES, COR_OPCOES);
 	}
 }
-
-
-

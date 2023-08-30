@@ -6,18 +6,15 @@
 #define BLOCOS_Y 25
 #define TAM_BLOCO 16
 
-void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador, Texture2D texturas[]);
-int CarregaFase(FASE *fase_atual, int num_fase);
-
 // Preenche a fase atual com os dados do arquivo de labirintos
-int CarregaFase(FASE *fase_atual, int num_fase)
+bool CarregaFase(FASE *fase_atual, int num_fase)
 {
     int ajuste_lab;
     FILE *arqlab;
 
     arqlab = fopen("labirintos.dat", "rb");
 	if(arqlab == NULL)
-		return 0;
+		return false;
 	else{
     	ajuste_lab = sizeof(LABIRINTO)*num_fase;
     	fseek(arqlab, ajuste_lab, 0);
@@ -25,7 +22,7 @@ int CarregaFase(FASE *fase_atual, int num_fase)
     	fread(&fase_atual->labirinto, sizeof(LABIRINTO), 1, arqlab);
 
     	fclose(arqlab);
-		return 1;
+		return true;
 	}
 }
 
@@ -44,8 +41,10 @@ void DesenhaLabirinto(LABIRINTO labirinto, JOGADOR jogador, Texture2D texturas[]
     for(i = exibicaoX ; i < labirinto.tamX && i < exibicaoX + BLOCOS_X; i++){
 		for(j = exibicaoY; j < labirinto.tamY && j < exibicaoY + BLOCOS_Y; j++){
             switch(labirinto.m[i][j]){
+			// Se o bloco a ser desenhado for livre, não desenhar nada
             case 0:
                 break;
+			// Senão, desenhar a textura correspondente (número do bloco - 1)
             default:
 				DrawTexture(texturas[(labirinto.m[i][j] - 1)], (i - exibicaoX) * TAM_BLOCO, (j - exibicaoY) * TAM_BLOCO, WHITE);
                 break;

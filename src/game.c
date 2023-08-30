@@ -13,11 +13,7 @@
 #define DURACAO_FASE 300
 #define MAX_CREDITOS 10
 
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[]);
-
-int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade);
-int CarregaJogo();
-int IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
+bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
 
 int Pause(int *opcao_selecionada);
 void DesenhaIndicadores(JOGADOR jogador, FASE fase);
@@ -158,13 +154,13 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 }
 
 // Inicia uma fase com as informações do SAVE
-int IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual)
+bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual)
 {
 	tempo_jogo = 0;
 	int i;
 
 	if(!CarregaFase(fase, jogo_atual.fase))
-		return 0;
+		return false;
 	else{
 		// Posiciona e reseta o jogador
 		jogador->creditos = 0;
@@ -210,20 +206,17 @@ int IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_
 			fase->labirinto.m[posX][posY] = 5;
 		}
 
-		return 1;
+		return true;
 	}
 }
 
 // Inicia um jogo com a dificuldade fornecida
-int NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade)
+bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade)
 {
 	jogo_atual.fase = 0;
 	jogo_atual.dificuldade = dificuldade;
 
-	if(IniciaFase(fase, jogador, professores, jogo_atual))
-		return 1;
-	else
-		return 0;
+	return IniciaFase(fase, jogador, professores, jogo_atual);
 }
 
 // Inicia um jogo com os parâmetros salvos no arquivo de save

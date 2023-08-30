@@ -3,35 +3,6 @@
 int CarregaPerguntas(PERGUNTA perguntas[]);
 int Pergunta(PERGUNTA perguntas[], int num_perguntas, int *alt_selecionada);
 
-// Mecânica das perguntas
-int Pergunta(PERGUNTA perguntas[], int aleatorio, int *alt_selecionada)
-{
-    int resposta;
-    int acertou = -1;
-
-	// Lógica da seleção da alternativa
-	resposta = Selecao(alt_selecionada, perguntas[aleatorio].num_alternativas);
-
-	// Verifica acerto
-	if(resposta != -1){
-        if(resposta + 1 == perguntas[aleatorio].alternativa_correta)
-        	acertou = 1;
-		else
-			acertou = 0;
-	}
-	else
-		acertou = -1;
-
-	// Desenha fundo para a pergunta
-	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
-
-	// Desenha o enunciado e as alternativas
-    DrawText(perguntas[aleatorio].enunciado, (RES_X - MeasureText(perguntas[aleatorio].enunciado, FONTE_ENUNCIADO))/2, 50, FONTE_ENUNCIADO, COR_ENUNCIADO);
-	DesenhaSelecao(*alt_selecionada, perguntas[aleatorio].num_alternativas, perguntas[aleatorio].alternativas);
-
-    return acertou;
-}
-
 /* Preenche o vetor de perguntas com as perguntas do arquivo de texto
  * Formatação das perguntas:
  *
@@ -64,3 +35,29 @@ int CarregaPerguntas(PERGUNTA perguntas[])
 	return num_perguntas - 1;
 }
 
+// Mecânica das perguntas
+int Pergunta(PERGUNTA perguntas[], int aleatorio, int *alt_selecionada)
+{
+    int resposta;
+    int acertou = -1;
+
+	// Lógica da seleção da alternativa
+	resposta = Selecao(alt_selecionada, perguntas[aleatorio].num_alternativas);
+
+	// Verifica acerto
+	if(resposta != -1){
+        if(resposta + 1 == perguntas[aleatorio].alternativa_correta)
+        	acertou = 1;
+		else
+			acertou = 0;
+	}
+
+	// Desenha fundo para a pergunta
+	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
+
+	// Desenha o enunciado e as alternativas
+    DrawText(perguntas[aleatorio].enunciado, (RES_X - MeasureText(perguntas[aleatorio].enunciado, FONTE_ENUNCIADO))/2, 50, FONTE_ENUNCIADO, COR_ENUNCIADO);
+	DesenhaSelecao(*alt_selecionada, perguntas[aleatorio].num_alternativas, perguntas[aleatorio].alternativas);
+
+    return acertou;
+}
