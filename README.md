@@ -16,7 +16,7 @@ Prof. Santiago V. Ravelo
  - [x] Informações
  - [x] Ganhadores
 ---
- - [ ] Arquivo binário de save
+ - [x] Arquivo binário de save
  - [x] Arquivo binário dos labirintos
  - [ ] Arquivo binário das estátuas
  - [ ] Arquivo binário dos ganhadores
@@ -30,7 +30,7 @@ Prof. Santiago V. Ravelo
  - [x] Professor/guardião
  - [x] Colega/estáta
 ---
- - [ ] Bomba
+ - [x] Bomba
  - [x] Crédito
 ---
  - [ ] Saída do labirinto
