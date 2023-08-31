@@ -59,7 +59,7 @@ bool MenuGanhadores()
 	if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
         sair = true;
 
-	GANHADOR ganhadores[NUM_GANHADORES] = {{"Teste", 20},{"Ok", 10}};
+	GANHADOR ganhadores[NUM_GANHADORES] = {{"Santiago", 1234567890},{"Ribas", 10101011}};
 	int i;
 
 	for(i = 0; i < NUM_GANHADORES; i++){

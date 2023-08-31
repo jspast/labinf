@@ -14,15 +14,19 @@
 #define MIN_CREDITOS 10
 #define MAX_CREDITOS 21
 
+#define NUM_MAX_FASES 10
+
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
 bool SalvarJogo(SAVE jogo_atual);
 
 int Pause(int *opcao_selecionada);
 void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[]);
-void CalculaPontuacao(JOGADOR jogador);
+void CalculaPontuacao(JOGADOR *jogador);
 void RecompensaColega(JOGADOR *jogador);
 
 int Derrota(int *opcao_selecionada);
+int Vitoria(int *opcao_selecionada);
+
 int CarregaColegas(POSICAO colegas[]);
 void PosicionaColegas(FASE *fase);
 bool SalvaEstatua(JOGADOR jogador);
@@ -65,8 +69,11 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		// De acordo com a movimentação analisada, verifica se o jogador passou de fase
         if(passar_fase)
         {
-           jogo_atual->fase++;
-           IniciaFase(fase, jogador, professores, *jogo_atual);
+        	jogo_atual->fase++;
+			if(jogo_atual->fase == NUM_MAX_FASES)
+				*estado = 5;
+			else
+        		IniciaFase(fase, jogador, professores, *jogo_atual);
         }
 
 		// Verifica se, na atualização, um professor encostou no jogador
@@ -78,6 +85,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
         }
 
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
+		CalculaPontuacao(jogador);
 		DesenhaIndicadores(*jogador, *fase, texturas);
 
 		if(IsKeyPressed(KEY_ESCAPE)){
@@ -197,6 +205,29 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			break;
 		}
 		break;
+	//------------------------------------------------------------------------------------
+    // VITORIA
+	case 5:
+		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
+		DesenhaIndicadores(*jogador, *fase, texturas);
+
+		switch(Vitoria(&opcao_selecionada)){
+		// Se a opção pressionada foi novo jogo
+		case 0:
+			*estado = 0;
+			opcao_selecionada = 0;
+			acao_pause = 3;
+			break;
+		// Se a opção pressionada foi sair
+		case 2:
+			acao_pause = -1;
+			break;
+		// Se não respondeu ainda
+		default:
+			*estado = 5;
+			break;
+		}
+		break;
 	}
 
 	return acao_pause;
@@ -228,6 +259,7 @@ bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo
 		jogador->vida = MAX_VIDA;
 		jogador->pos.x = fase->labirinto.entrada.x;
 		jogador->pos.y = fase->labirinto.entrada.y;
+		jogador->labirinto = jogo_atual.fase;
 		fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 2;
 
 		// Posiciona professores no labirinto
@@ -385,8 +417,6 @@ void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[])
 {
 	int i;
 
-	CalculaPontuacao(jogador);
-
 	DrawText("Vida:", 10, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
 	DrawText(TextFormat("%d", jogador.vida), 10, INDICADORES_Y2, FONTE_INDICADORES, COR_INDICADORES);
 
@@ -408,10 +438,10 @@ void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[])
 }
 
 // Calcula a pontuação total acumulada pelo aluno
-void CalculaPontuacao(JOGADOR jogador)
+void CalculaPontuacao(JOGADOR *jogador)
 {
 	// Fórmula simplificada (só considera créditos e tempo do labirinto atual)
-	jogador.pontuacao = 10 * MAX_CREDITOS * jogador.labirinto * jogador.creditos * jogador.tempo_restante;
+	jogador->pontuacao = 10 * MAX_CREDITOS * jogador->labirinto * jogador->creditos * jogador->tempo_restante;
 }
 
 // Define uma recompensa aleatória ao jogador por salvar o colega
@@ -442,6 +472,22 @@ int Derrota(int *opcao_selecionada)
 
 	acao = Selecao(opcao_selecionada, 3);
 	DesenhaSelecao(*opcao_selecionada, 3, opcoes);
+
+	return acao;
+}
+
+// Tela de derrota
+int Vitoria(int *opcao_selecionada)
+{
+	int acao = -1;
+	char opcoes[2][TAM_MAX_OPCOES] = {"Novo Jogo", "Sair"};
+	char vitoria[10] = "VITÓRIA";
+
+	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
+	DrawText(vitoria, (RES_X - MeasureText(vitoria, FONTE_TITULO))/2, 50, FONTE_TITULO, GREEN);
+
+	acao = Selecao(opcao_selecionada, 2);
+	DesenhaSelecao(*opcao_selecionada, 2, opcoes);
 
 	return acao;
 }
