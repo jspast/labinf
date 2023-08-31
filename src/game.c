@@ -1,7 +1,7 @@
 #include "game.h"
 
 #define NUM_OPCOES 5
-#define TAM_MAX_OPCOES 18
+#define TAM_MAX_OPCOES 50
 
 #define FONTE_INDICADORES 20
 #define COR_INDICADORES LIGHTGRAY
@@ -22,7 +22,11 @@ void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[]);
 void CalculaPontuacao(JOGADOR jogador);
 void RecompensaColega(JOGADOR *jogador);
 
-double tempo_jogo;
+int Derrota(int *opcao_selecionada);
+int CarregaColegas(POSICAO colegas[]);
+void PosicionaColegas(FASE *fase);
+bool SalvaEstatua(JOGADOR jogador);
+
 int opcao_selecionada = 0;
 int pergunta_aleatoria;
 
@@ -38,8 +42,13 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
     // JOGO
     case 0:
 		// Calcula o tempo de jogo
-		tempo_jogo += GetFrameTime();
-		jogador->tempo_restante = fase->max_tempo - tempo_jogo;
+		jogador->tempo_restante -= GetFrameTime();
+
+		if(jogador->vida <= 0 || jogador->tempo_restante <= 0){
+			*estado = 4;
+			opcao_selecionada = 0;
+			//SalvaEstatua(*jogador);
+		}
 
 		if(IsKeyPressed(KEY_SPACE) && jogador->bombas > 0)
 			JogarBomba(jogador, fase);
@@ -151,6 +160,35 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			break;
 		}
         break;
+	//------------------------------------------------------------------------------------
+    // DERROTA
+	case 4:
+		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
+		DesenhaIndicadores(*jogador, *fase, texturas);
+
+		switch(Derrota(&opcao_selecionada)){
+		// Se a opção pressionada foi reiniciar
+		case 0:
+			*estado = 0;
+			acao_pause = 5;
+			IniciaFase(fase, jogador, professores, jogo_atual);
+			break;
+		// Se a opção pressionada foi novo jogo
+		case 1:
+			*estado = 0;
+			opcao_selecionada = 0;
+			acao_pause = 3;
+			break;
+		// Se a opção pressionada foi sair
+		case 2:
+			acao_pause = -1;
+			break;
+		// Se não respondeu ainda
+		default:
+			*estado = 4;
+			break;
+		}
+		break;
 	}
 
 	return acao_pause;
@@ -159,30 +197,30 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 // Inicia uma fase com as informações do SAVE
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual)
 {
-	tempo_jogo = 0;
 	int i;
 
 	if(!CarregaFase(fase, jogo_atual.fase))
 		return false;
 	else{
+		// Ajusta os parâmetros da fase conforme número e dificuldade escolhida
+		fase->max_tempo = DURACAO_FASE - (jogo_atual.fase + jogo_atual.dificuldade)*20;
+		fase->max_professores = MAX_PROFESSORES * (1 + jogo_atual.dificuldade)/3;
+		fase->min_creditos = MIN_CREDITOS + (jogo_atual.fase + jogo_atual.dificuldade);
+
 		// Posiciona e reseta o jogador
+		jogador->tempo_restante = fase->max_tempo;
 		jogador->creditos = 0;
 		jogador->vida = MAX_VIDA;
 		jogador->pos.x = fase->labirinto.entrada.x;
 		jogador->pos.y = fase->labirinto.entrada.y;
 		fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 2;
 
-		// Ajusta os parâmetros da fase conforme número e dificuldade escolhida
-		fase->max_tempo = DURACAO_FASE - (jogo_atual.fase + jogo_atual.dificuldade)*20;
-		fase->max_professores = MAX_PROFESSORES * (1 + jogo_atual.dificuldade)/3;
-		fase->min_creditos = MIN_CREDITOS + (jogo_atual.fase + jogo_atual.dificuldade);
-
 		// Posiciona professores no labirinto
 		for(i = 0; i < fase->max_professores; i++){
 			int posX, posY;
 			do{
-			posX = GetRandomValue(0, fase->labirinto.tamX - 1);
-			posY = GetRandomValue(0, fase->labirinto.tamY - 1);
+				posX = GetRandomValue(0, fase->labirinto.tamX - 1);
+				posY = GetRandomValue(0, fase->labirinto.tamY - 1);
 			} while(fase->labirinto.m[posX][posY] != 0);
 			professores[i].ativo = 1;
 			professores[i].pos.x = posX;
@@ -190,27 +228,64 @@ bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo
 		}
 
 		// Posiciona colegas no labirinto
-		for(i = 0; i < NUM_COLEGAS; i++){
-			int posX, posY;
-			do{
-			posX = GetRandomValue(0, fase->labirinto.tamX - 1);
-			posY = GetRandomValue(0, fase->labirinto.tamY - 1);
-			} while(fase->labirinto.m[posX][posY] != 0);
-			fase->labirinto.m[posX][posY] = 4;
-		}
+		PosicionaColegas(fase);
 
 		// Posiciona créditos no labirinto
 		for(i = 0; i < fase->min_creditos; i++){
 			int posX, posY;
 			do{
-			posX = GetRandomValue(0, fase->labirinto.tamX - 1);
-			posY = GetRandomValue(0, fase->labirinto.tamY - 1);
+				posX = GetRandomValue(0, fase->labirinto.tamX - 1);
+				posY = GetRandomValue(0, fase->labirinto.tamY - 1);
 			} while(fase->labirinto.m[posX][posY] != 0);
 			fase->labirinto.m[posX][posY] = 5;
 		}
 
 		return true;
 	}
+}
+
+// Posiciona os colegas na matriz com base no arquivo de estátuas
+void PosicionaColegas(FASE *fase)
+{
+	int i;
+	int num_colegas = 0;
+	POSICAO colegas[NUM_COLEGAS];
+
+	// Carrega do arquivo (DISABILITADO)
+	//num_colegas = CarregaColegas(colegas);
+
+	for(i = 0; i < num_colegas; i++)
+		fase->labirinto.m[colegas[i].x][colegas[i].y] = 4;
+
+	for(i = 0; i < NUM_COLEGAS - num_colegas; i++){
+		int posX, posY;
+		do{
+			posX = GetRandomValue(0, fase->labirinto.tamX - 1);
+			posY = GetRandomValue(0, fase->labirinto.tamY - 1);
+		} while(fase->labirinto.m[posX][posY] != 0);
+		fase->labirinto.m[posX][posY] = 4;
+		}
+}
+
+// Carrega colegas do arquivo (DISABILITADO)
+int CarregaColegas(POSICAO colegas[])
+{
+	int num_colegas = 0;
+
+	FILE *arq;
+
+    arq = fopen("estatuas.dat", "rb");
+	if(arq == NULL)
+		num_colegas = 0;
+	else{
+		while(!feof(arq)){
+    		fread(&colegas[num_colegas], sizeof(POSICAO), 1, arq);
+			num_colegas++;
+		}
+    	fclose(arq);
+	}
+
+	return num_colegas - 1;
 }
 
 // Inicia um jogo com a dificuldade fornecida
@@ -223,7 +298,6 @@ bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificul
 }
 
 // Inicia um jogo com os parâmetros salvos no arquivo de save
-
 bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual)
 {
 	FILE *arq;
@@ -321,7 +395,8 @@ void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[])
 // Calcula a pontuação total acumulada pelo aluno
 void CalculaPontuacao(JOGADOR jogador)
 {
-	jogador.pontuacao = 10 * MAX_CREDITOS * jogador.labirinto * jogador.creditos / tempo_jogo;
+	// Fórmula simplificada (só considera créditos e tempo do labirinto atual)
+	jogador.pontuacao = 10 * MAX_CREDITOS * jogador.labirinto * jogador.creditos * jogador.tempo_restante;
 }
 
 // Define uma recompensa aleatória ao jogador por salvar o colega
@@ -338,4 +413,34 @@ void RecompensaColega(JOGADOR *jogador){
                 jogador->bombas++;
                 break;
     }
+}
+
+// Tela de derrota
+int Derrota(int *opcao_selecionada)
+{
+	int acao = -1;
+	char opcoes[3][TAM_MAX_OPCOES] = {"Reiniciar", "Novo Jogo", "Sair"};
+	char derrota[8] = "DERROTA";
+
+	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
+	DrawText(derrota, (RES_X - MeasureText(derrota, FONTE_TITULO))/2, 50, FONTE_TITULO, RED);
+
+	acao = Selecao(opcao_selecionada, 3);
+	DesenhaSelecao(*opcao_selecionada, 3, opcoes);
+
+	return acao;
+}
+
+// Salva posição da morte para arquivo de estátuas (DISABILITADO)
+bool SalvaEstatua(JOGADOR jogador)
+{
+	FILE *arq;
+
+	arq = fopen("estatuas.dat", "ab");
+	if(arq == NULL)
+		return false;
+	else
+		fwrite(&jogador.pos, sizeof(POSICAO), 1, arq);
+
+	return true;
 }
