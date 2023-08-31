@@ -79,9 +79,9 @@ typedef struct{
 bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual);
 bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual);
 
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE jogo_atual);
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual);
 
-bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase);
+bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase);
 void JogarBomba(JOGADOR *jogador, FASE *fase);
 bool AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 

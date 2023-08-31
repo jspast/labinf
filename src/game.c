@@ -31,9 +31,10 @@ int opcao_selecionada = 0;
 int pergunta_aleatoria;
 
 // Lógica principal do jogo
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE jogo_atual)
+int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual)
 {
 	int acao_pause = 5;
+	bool passar_fase = false;
 
 	//-----------------------------------------------------------------------------------
     // Separa a lógica de cada estado do jogo
@@ -54,11 +55,18 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			JogarBomba(jogador, fase);
 
 		// Verifica se, na movimentação, o jogador encostou num colega
-		if(MovimentacaoJogador(jogador, fase))
+		if(MovimentacaoJogador(jogador, fase, &passar_fase))
 		{
 			pergunta_aleatoria = GetRandomValue(0, num_perguntas - 1);
 			opcao_selecionada = 0;
 			*estado = 3;
+        }
+
+		// De acordo com a movimentação analisada, verifica se o jogador passou de fase
+        if(passar_fase)
+        {
+           jogo_atual->fase++;
+           IniciaFase(fase, jogador, professores, *jogo_atual);
         }
 
 		// Verifica se, na atualização, um professor encostou no jogador
@@ -97,14 +105,14 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		// Se a opção pressionada foi salvar
 		case 1:
 			acao_pause = 5;
-			SalvarJogo(jogo_atual); // Por enquanto não verifica se conseguiu salvar
+			SalvarJogo(*jogo_atual); // Por enquanto não verifica se conseguiu salvar
 			*estado = 1;
 			break;
 		// Se a opção pressionada foi reiniciar
 		case 2:
 			*estado = 0;
 			acao_pause = 5;
-			IniciaFase(fase, jogador, professores, jogo_atual);
+			IniciaFase(fase, jogador, professores, *jogo_atual);
 			break;
 		// Se a opção pressionada foi novo jogo
 		case 3:
@@ -171,7 +179,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		case 0:
 			*estado = 0;
 			acao_pause = 5;
-			IniciaFase(fase, jogador, professores, jogo_atual);
+			IniciaFase(fase, jogador, professores, *jogo_atual);
 			break;
 		// Se a opção pressionada foi novo jogo
 		case 1:
@@ -197,7 +205,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 // Inicia uma fase com as informações do SAVE
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual)
 {
-	int i;
+	int i, j;
 
 	if(!CarregaFase(fase, jogo_atual.fase))
 		return false;
@@ -206,6 +214,13 @@ bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo
 		fase->max_tempo = DURACAO_FASE - (jogo_atual.fase + jogo_atual.dificuldade)*20;
 		fase->max_professores = MAX_PROFESSORES * (1 + jogo_atual.dificuldade)/3;
 		fase->min_creditos = MIN_CREDITOS + (jogo_atual.fase + jogo_atual.dificuldade);
+
+		// Coloca os blocos de saída do labirinto
+		for(i = fase->labirinto.saida.inic_x; i <= fase->labirinto.saida.fim_x; i++){
+			for(j = fase->labirinto.saida.inic_y; j <= fase->labirinto.saida.fim_y; j++){
+				fase->labirinto.m[i][j] = 7;
+			}
+		}
 
 		// Posiciona e reseta o jogador
 		jogador->tempo_restante = fase->max_tempo;
@@ -444,3 +459,4 @@ bool SalvaEstatua(JOGADOR jogador)
 
 	return true;
 }
+

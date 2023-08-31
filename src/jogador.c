@@ -1,7 +1,19 @@
 #include "game.h"
 
+// Testa se o jogador tem créditos suficientes para passar de fase
+bool CreditoSuficiente(JOGADOR *jogador, FASE *fase) {
+    bool passar_fase;
+
+    if (jogador->creditos >= fase->min_creditos)
+        passar_fase = true;
+    else
+        passar_fase = false;
+
+    return passar_fase;
+}
+
 // Mecânica da movimentação do jogador
-bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
+bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase)
 {
 	bool perguntar = false;
 	char ultimo_mov;
@@ -46,8 +58,13 @@ bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase)
 		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 4)
 			perguntar = true;
 
+		// Se o jogador alcança a saída do labirinto após o movimento, testa se ele já tem créditos suficientes para passar a fase
+        if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 7)
+            *passar_fase = CreditoSuficiente(jogador, fase);
+
 		// Se o movimento for válido, atualiza a matriz com a nova posição do jogador
 		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] != 1 &&
+		   fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] != 7 &&
 		   jogador->pos.x + jogador->movX != -1 && jogador->pos.x + jogador->movX != fase->labirinto.tamX &&
 		   jogador->pos.y + jogador->movY != -1 && jogador->pos.y + jogador->movY != fase->labirinto.tamY)
 		{
