@@ -33,7 +33,7 @@ Prof. Santiago V. Ravelo
  - [x] Bomba
  - [x] Crédito
 ---
- - [ ] Saída do labirinto
+ - [X] Saída do labirinto
  - [ ] Pontuação
  - [x] Níveis de dificuldade
 ---
@@ -65,14 +65,3 @@ Código de tudo relacionado ao menu: tela inicial, dos ganhadores e de informaç
 ### game.c
 
 Código do "jogo em si". Provavelmente será possível dividir em mais arquivos.
-
-(Ainda está bem feio e a parte de carregar o jogo e labirintos de arquivos é só um esboço.)
-
-## Notas:
-
-Tem muita coisa pra fazer (obg Santiago!) então pode mexer com o que tu quiser. Vamos tentar colocar no README as "áreas" que cada um tá mexendo só pra evitar conflitos.
-
-
-
-
-
