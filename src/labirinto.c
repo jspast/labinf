@@ -1,10 +1,7 @@
+#include <raylib.h>
+#include <stdio.h>
 #include "game.h"
-
-#define MAX_TAMANHO_LABIRINTO 100
-#define NUM_DIFICULDADES 3
-#define BLOCOS_X 50
-#define BLOCOS_Y 25
-#define TAM_BLOCO 16
+#include "defines.h"
 
 // Preenche a fase atual com os dados do arquivo de labirintos
 bool CarregaFase(FASE *fase_atual, int num_fase)

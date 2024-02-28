@@ -1,4 +1,7 @@
+#include <raylib.h>
+#include <stdlib.h>
 #include "game.h"
+#include "defines.h"
 
 bool AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FASE *fase);
@@ -47,7 +50,7 @@ void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FAS
 			professores[id].pos.y += professores[id].movY;
 		}
 		else{
-	        professores[id].movX = 0;
+			professores[id].movX = 0;
 			professores[id].movY = 0;
 		}
 		fase->labirinto.m[professores[id].pos.x][professores[id].pos.y] = 3;
@@ -70,41 +73,41 @@ void DirecaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FASE fas
 	// Se a distancia entre o jogador e o professor for grande ou o professor não tem visão do aluno
 	if(sqrt(pow(distX, 2) + pow(distY, 2)) > 10 ||
 	   !ProfessorTemVisao(professores[id].pos, jogador.pos, fase)){
-        // E se ele já não tiver uma direção, define uma direção aleatória para o professor
-        if(professores[id].movX == 0 && professores[id].movY == 0)
-            switch(GetRandomValue(0, 3)){
-            case 0:
-                professores[id].movX = 1;
-                break;
-            case 1:
-                professores[id].movX = -1;
-                break;
-            case 2:
-                professores[id].movY = 1;
-                break;
-            case 3:
-                professores[id].movY = -1;
-                break;
-            }
-    }
-    // Senão, dadas as distancias X e Y, decide a direção do movimento perseguindo o aluno
-    else{
-        professores[id].movX = 0;
-        professores[id].movY = 0;
+		// E se ele já não tiver uma direção, define uma direção aleatória para o professor
+		if(professores[id].movX == 0 && professores[id].movY == 0)
+			switch(GetRandomValue(0, 3)){
+			case 0:
+				professores[id].movX = 1;
+				break;
+			case 1:
+				professores[id].movX = -1;
+				break;
+			case 2:
+				professores[id].movY = 1;
+				break;
+			case 3:
+				professores[id].movY = -1;
+				break;
+			}
+	}
+	// Senão, dadas as distancias X e Y, decide a direção do movimento perseguindo o aluno
+	else{
+		professores[id].movX = 0;
+		professores[id].movY = 0;
 
-        if(abs(distX) >= abs(distY)){
-            if(distX > 0)
-                professores[id].movX = 1;
-            else
-                professores[id].movX = -1;
-        }
-        else{
-            if(distY > 0)
-                professores[id].movY = 1;
-            else
-                professores[id].movY = -1;
-        }
-    }
+		if(abs(distX) >= abs(distY)){
+			if(distX > 0)
+				professores[id].movX = 1;
+			else
+				professores[id].movX = -1;
+		}
+		else{
+			if(distY > 0)
+				professores[id].movY = 1;
+			else
+				professores[id].movY = -1;
+		}
+	}
 }
 
 // Função recursiva que verifica se há parede entre o professor e o aluno
@@ -122,15 +125,15 @@ bool ProfessorTemVisao(POSICAO professor, POSICAO jogador, FASE fase)
 	// Verifica a direção do próximo movimento
 	if(abs(distX) >= abs(distY)){
 		if(distX > 0)
-        	movX = 1;
-        else
-            movX = -1;
-    }
-    else{
-        if(distY > 0)
-            movY = 1;
-        else
-            movY = -1;
+			movX = 1;
+		else
+			movX = -1;
+	}
+	else{
+		if(distY > 0)
+			movY = 1;
+		else
+			movY = -1;
 	}
 
 	// Caso trivial professor consegue chegar no aluno

@@ -1,4 +1,8 @@
-#include "main.h"
+#include <raylib.h>
+#include "menu.h"
+#include "graphics.h"
+#include "game.h"
+#include "defines.h"
 
 int main()
 {
@@ -7,15 +11,12 @@ int main()
 	int opcao_selecionada = 0;
 	int estado_jogo = 0;
 
-    FASE fase_atual;
+	FASE fase_atual;
 	JOGADOR jogador = {0};
 	PROFESSOR professores[MAX_PROFESSORES] = {0};
 	PERGUNTA perguntas[MAX_PERGUNTAS];
 	SAVE jogo_atual;
 	int num_perguntas;
-
-	// Define a seed dos números aleatórios
-	SetRandomSeed(srand(time(NULL)));
 
 	// Carrega as perguntas do arquivo guardando o número de perguntas
 	num_perguntas = CarregaPerguntas(perguntas);
@@ -35,26 +36,26 @@ int main()
 		TelaCheia();
 
 		//-----------------------------------------------------------------------------------
-        // Separa a lógica de cada estado do jogo
-        switch(estado){
-        //-----------------------------------------------------------------------------------
-        // MENU
-        case 0:
+		// Separa a lógica de cada estado do jogo
+		switch(estado){
+		//-----------------------------------------------------------------------------------
+		// MENU
+		case 0:
 			estado = MenuInicial(&opcao_selecionada);
-            break;
-        //------------------------------------------------------------------------------------
-        // GANHADORES
-        case 1:
+			break;
+		//------------------------------------------------------------------------------------
+		// GANHADORES
+		case 1:
 			if(MenuGanhadores() == 1)
 				estado = 0;
-            break;
-        //------------------------------------------------------------------------------------
-        // INFORMAÇÕES
-        case 2:
+			break;
+		//------------------------------------------------------------------------------------
+		// INFORMAÇÕES
+		case 2:
 			if(MenuInformacoes(texturas) == 1)
 				estado = 0;
-            break;
-        //------------------------------------------------------------------------------------
+			break;
+		//------------------------------------------------------------------------------------
 		// NOVO JOGO
 		case 3:
 			dificuldade = (MenuNovoJogo(&opcao_selecionada));
@@ -64,7 +65,7 @@ int main()
 				else
 					estado = -2;
 			}
-            break;
+			break;
 		//------------------------------------------------------------------------------------
 		// CARREGA JOGO
 		case 4:
@@ -72,12 +73,12 @@ int main()
 				estado = 5;
 			else
 				estado = -2;
-            break;
+			break;
 		//------------------------------------------------------------------------------------
 		// JOGO
 		case 5:
 			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas, &jogo_atual);
-            break;
+			break;
 		//------------------------------------------------------------------------------------
 		// ERRO AO LIDAR COM ARQUIVOS
 		case -2:
@@ -85,13 +86,13 @@ int main()
 			if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
 				estado = -1;
 			break;
-        }
+		}
 
 		DesenhaQuadro();
-    }
+	}
 
 	FechaTexturas(texturas);
 	FechaJanela();
 
-    return 0;
+	return 0;
 }

@@ -1,22 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "main.h"
+#include <raylib.h>
+#include "defines.h"
 #include <math.h>
-
-#define NUM_TEXTURAS 10
-
-#define MAX_PROFESSORES 6
-
-#define MAX_TAMANHO_LABIRINTO 100
-
-#define NUM_MAX_ALTERNATIVAS 5
-#define TAM_MAX_ALTERNATIVAS 50
-#define TAM_MAX_ENUNCIADO 100
-#define MAX_PERGUNTAS 100
-#define FONTE_ENUNCIADO 20
-#define COR_ENUNCIADO WHITE
-#define COR_FUNDO (Color){ 0, 0, 0, 128}
 
 typedef struct{
 	int x;
@@ -38,7 +25,7 @@ typedef struct{
 	int creditos;
 	int labirinto;
 	int pontuacao;
-        int bombas;
+		int bombas;
 } JOGADOR;
 
 typedef struct{
@@ -70,10 +57,10 @@ typedef struct{
 } SAVE;
 
 typedef struct{
-    char enunciado[TAM_MAX_ENUNCIADO];
-    int num_alternativas;
-    int alternativa_correta;
-    char alternativas[NUM_MAX_ALTERNATIVAS][TAM_MAX_ALTERNATIVAS];
+	char enunciado[TAM_MAX_ENUNCIADO];
+	int num_alternativas;
+	int alternativa_correta;
+	char alternativas[NUM_MAX_ALTERNATIVAS][TAM_MAX_ALTERNATIVAS];
 } PERGUNTA;
 
 bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual);
@@ -92,3 +79,4 @@ int CarregaPerguntas(PERGUNTA perguntas[]);
 int Pergunta(PERGUNTA perguntas[], int num_perguntas, int *alt_selecionada);
 
 #endif
+

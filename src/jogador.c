@@ -1,4 +1,6 @@
+#include <raylib.h>
 #include "game.h"
+#include "defines.h"
 
 // Testa se o jogador tem créditos suficientes para passar de fase
 bool CreditoSuficiente(JOGADOR *jogador, FASE *fase) {

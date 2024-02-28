@@ -1,20 +1,8 @@
+#include <raylib.h>
+#include <stdio.h>
 #include "game.h"
-
-#define NUM_OPCOES 5
-#define TAM_MAX_OPCOES 50
-
-#define FONTE_INDICADORES 20
-#define COR_INDICADORES LIGHTGRAY
-#define INDICADORES_Y 405
-#define INDICADORES_Y2 INDICADORES_Y + FONTE_INDICADORES
-
-#define NUM_COLEGAS 3
-#define MAX_VIDA 2
-#define DURACAO_FASE 300
-#define MIN_CREDITOS 10
-#define MAX_CREDITOS 21
-
-#define NUM_MAX_FASES 10
+#include "menu.h"
+#include "defines.h"
 
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
 bool SalvarJogo(SAVE jogo_atual);
@@ -41,11 +29,11 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	bool passar_fase = false;
 
 	//-----------------------------------------------------------------------------------
-    // Separa a lógica de cada estado do jogo
-    switch(*estado){
-    //-----------------------------------------------------------------------------------
-    // JOGO
-    case 0:
+	// Separa a lógica de cada estado do jogo
+	switch(*estado){
+	//-----------------------------------------------------------------------------------
+	// JOGO
+	case 0:
 		// Calcula o tempo de jogo
 		jogador->tempo_restante -= GetFrameTime();
 
@@ -64,17 +52,17 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			pergunta_aleatoria = GetRandomValue(0, num_perguntas - 1);
 			opcao_selecionada = 0;
 			*estado = 3;
-        }
+		}
 
 		// De acordo com a movimentação analisada, verifica se o jogador passou de fase
-        if(passar_fase)
-        {
-        	jogo_atual->fase++;
+		if(passar_fase)
+		{
+			jogo_atual->fase++;
 			if(jogo_atual->fase == NUM_MAX_FASES)
 				*estado = 5;
 			else
-        		IniciaFase(fase, jogador, professores, *jogo_atual);
-        }
+				IniciaFase(fase, jogador, professores, *jogo_atual);
+		}
 
 		// Verifica se, na atualização, um professor encostou no jogador
 		if(AtualizaProfessores(professores, *jogador, fase))
@@ -82,7 +70,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			pergunta_aleatoria = GetRandomValue(0, num_perguntas - 1);
 			opcao_selecionada = 0;
 			*estado = 2;
-        }
+		}
 
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		CalculaPontuacao(jogador);
@@ -92,10 +80,10 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			opcao_selecionada = 0;
 			*estado = 1;
 		}
-        break;
-    //------------------------------------------------------------------------------------
-    // PAUSE
-    case 1:
+		break;
+	//------------------------------------------------------------------------------------
+	// PAUSE
+	case 1:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase, texturas);
 
@@ -128,10 +116,10 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			opcao_selecionada = 0;
 			break;
 		}
-        break;
+		break;
 	//------------------------------------------------------------------------------------
-    // PERGUNTA PROFESSOR
-    case 2:
+	// PERGUNTA PROFESSOR
+	case 2:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase, texturas);
 
@@ -139,13 +127,13 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		// Se errou
 		case 0:
 			jogador->vida--;
-            *estado = 0;
-            break;
-        // Se acertou
+			*estado = 0;
+			break;
+		// Se acertou
 		case 1:
 			jogador->creditos++;
-            *estado = 0;
-            break;
+			*estado = 0;
+			break;
 		// Se não respondeu ainda
 		default:
 			*estado = 2;
@@ -153,31 +141,31 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		}
 		break;
 	//------------------------------------------------------------------------------------
-    // PERGUNTA COLEGA
-    case 3:
+	// PERGUNTA COLEGA
+	case 3:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase, texturas);
 
 		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
 		// Se errou
 		case 0:
-            *estado = 0;
-            break;
-        // Se acertou
+			*estado = 0;
+			break;
+		// Se acertou
 		case 1:
 			// Recompensa por ajudar o colega
 			// bomba, relógio ou vida
 			RecompensaColega(jogador);
-            *estado = 0;
-            break;
+			*estado = 0;
+			break;
 		// Se não respondeu ainda
 		default:
 			*estado = 3;
 			break;
 		}
-        break;
+		break;
 	//------------------------------------------------------------------------------------
-    // DERROTA
+	// DERROTA
 	case 4:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase, texturas);
@@ -206,7 +194,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 		}
 		break;
 	//------------------------------------------------------------------------------------
-    // VITORIA
+	// VITORIA
 	case 5:
 		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		DesenhaIndicadores(*jogador, *fase, texturas);
@@ -321,15 +309,15 @@ int CarregaColegas(POSICAO colegas[])
 
 	FILE *arq;
 
-    arq = fopen("estatuas.dat", "rb");
+	arq = fopen("estatuas.dat", "rb");
 	if(arq == NULL)
 		num_colegas = 0;
 	else{
 		while(!feof(arq)){
-    		fread(&colegas[num_colegas], sizeof(POSICAO), 1, arq);
+			fread(&colegas[num_colegas], sizeof(POSICAO), 1, arq);
 			num_colegas++;
 		}
-    	fclose(arq);
+		fclose(arq);
 	}
 
 	return num_colegas - 1;
@@ -349,10 +337,10 @@ bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jo
 {
 	FILE *arq;
 
-    arq = fopen("save.dat","rb");
-    if(arq == NULL)
+	arq = fopen("save.dat","rb");
+	if(arq == NULL)
 		return false;
-    else
+	else
 		fread(jogo_atual, sizeof(SAVE), 1, arq);
 
 	return IniciaFase(fase, jogador, professores, *jogo_atual);
@@ -387,7 +375,7 @@ int Pause(int *opcao_selecionada)
 
 	// Define o retorno para função Jogo
 	switch(acao){
-    // VOLTAR
+	// VOLTAR
 	case 0:
 		break;
 	// SALVAR
@@ -448,16 +436,16 @@ void CalculaPontuacao(JOGADOR *jogador)
 void RecompensaColega(JOGADOR *jogador){
 
 	switch(GetRandomValue(0, 2)){
-            case 0:
+			case 0:
 				jogador->vida++;
-                break;
-            case 1:
-                jogador->tempo_restante += 20;
-                break;
-            case 2:
-                jogador->bombas++;
-                break;
-    }
+				break;
+			case 1:
+				jogador->tempo_restante += 20;
+				break;
+			case 2:
+				jogador->bombas++;
+				break;
+	}
 }
 
 // Tela de derrota

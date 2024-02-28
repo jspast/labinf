@@ -1,0 +1,54 @@
+#ifndef DEFINES_H
+#define DEFINES_H
+
+#define MIN(a, b) ((a)<(b)? (a) : (b))
+#define RES_X 800
+#define RES_Y 450
+
+#define NUM_TEXTURAS 10
+#define MAX_PROFESSORES 6
+#define MAX_TAMANHO_LABIRINTO 100
+#define NUM_MAX_ALTERNATIVAS 5
+#define TAM_MAX_ALTERNATIVAS 50
+#define TAM_MAX_ENUNCIADO 100
+#define MAX_PERGUNTAS 100
+#define FONTE_ENUNCIADO 20
+#define COR_ENUNCIADO WHITE
+#define COR_FUNDO (Color){ 0, 0, 0, 128}
+
+#define COR_TITULO WHITE
+#define COR_OPCOES GRAY
+#define COR_OPCAO_SELECIONADA LIGHTGRAY
+#define FONTE_TITULO 30
+#define FONTE_OPCOES 20
+#define ESPACAMENTO (FONTE_OPCOES/2)
+#define ESPACAMENTO_INFORMACOES 32
+#define TAM_MAX_OPCOES 50
+#define NUM_OPCOES 5
+#define NUM_INFORMACOES 7
+#define NUM_GANHADORES 10
+#define NUM_DIFICULDADES 3   
+
+#define NUM_OPCOES 5
+#define TAM_MAX_OPCOES 50
+#define FONTE_INDICADORES 20
+#define COR_INDICADORES LIGHTGRAY
+#define INDICADORES_Y 405
+#define INDICADORES_Y2 INDICADORES_Y + FONTE_INDICADORES
+#define NUM_COLEGAS 3
+#define MAX_VIDA 2
+#define DURACAO_FASE 300
+#define MIN_CREDITOS 10
+#define MAX_CREDITOS 21
+#define NUM_MAX_FASES 10         
+
+#define COR_TELA BLACK
+//#define COR_TELA (Color){71, 45, 60, 255} // Cor "original" do fundo dos sprites
+
+#define MAX_TAMANHO_LABIRINTO 100
+#define NUM_DIFICULDADES 3
+#define BLOCOS_X 50
+#define BLOCOS_Y 25
+#define TAM_BLOCO 16
+
+#endif

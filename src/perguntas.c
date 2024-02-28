@@ -1,4 +1,8 @@
+#include <raylib.h>
+#include <stdio.h>
+#include "menu.h"
 #include "game.h"
+#include "defines.h"
 
 int CarregaPerguntas(PERGUNTA perguntas[]);
 int Pergunta(PERGUNTA perguntas[], int num_perguntas, int *alt_selecionada);
@@ -18,7 +22,7 @@ int CarregaPerguntas(PERGUNTA perguntas[])
 	int num_perguntas = 0;
 	int i;
 
-    FILE *arq;
+	FILE *arq;
 	arq = fopen("perguntas.txt", "r");
 	if(arq == NULL)
 		return 0;
@@ -38,16 +42,16 @@ int CarregaPerguntas(PERGUNTA perguntas[])
 // Mecânica das perguntas
 int Pergunta(PERGUNTA perguntas[], int aleatorio, int *alt_selecionada)
 {
-    int resposta;
-    int acertou = -1;
+	int resposta;
+	int acertou = -1;
 
 	// Lógica da seleção da alternativa
 	resposta = Selecao(alt_selecionada, perguntas[aleatorio].num_alternativas);
 
 	// Verifica acerto
 	if(resposta != -1){
-        if(resposta + 1 == perguntas[aleatorio].alternativa_correta)
-        	acertou = 1;
+		if(resposta + 1 == perguntas[aleatorio].alternativa_correta)
+			acertou = 1;
 		else
 			acertou = 0;
 	}
@@ -56,8 +60,8 @@ int Pergunta(PERGUNTA perguntas[], int aleatorio, int *alt_selecionada)
 	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
 
 	// Desenha o enunciado e as alternativas
-    DrawText(perguntas[aleatorio].enunciado, (RES_X - MeasureText(perguntas[aleatorio].enunciado, FONTE_ENUNCIADO))/2, 50, FONTE_ENUNCIADO, COR_ENUNCIADO);
+	DrawText(perguntas[aleatorio].enunciado, (RES_X - MeasureText(perguntas[aleatorio].enunciado, FONTE_ENUNCIADO))/2, 50, FONTE_ENUNCIADO, COR_ENUNCIADO);
 	DesenhaSelecao(*alt_selecionada, perguntas[aleatorio].num_alternativas, perguntas[aleatorio].alternativas);
 
-    return acertou;
+	return acertou;
 }
