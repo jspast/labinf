@@ -51,4 +51,7 @@
 #define BLOCOS_Y 25
 #define TAM_BLOCO 16
 
+#define COOLDOWN_JOGADOR 0.05
+#define COOLDOWN_PROFESSOR 0.03
+
 #endif

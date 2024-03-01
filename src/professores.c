@@ -56,7 +56,7 @@ void MovimentacaoProfessor(int id, PROFESSOR professores[], JOGADOR jogador, FAS
 		fase->labirinto.m[professores[id].pos.x][professores[id].pos.y] = 3;
 
 		// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
-		professores[id].cooldown = 0.03;
+		professores[id].cooldown = COOLDOWN_PROFESSOR;
 	}
 }
 
