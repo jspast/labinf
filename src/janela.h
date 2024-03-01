@@ -1,10 +1,12 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#ifndef JANELA_H
+#define JANELA_H
 
 #include <raylib.h>
 
 void IniciaJanela();
 void FechaJanela();
+
+void AtualizaFPS(int *monitor);
 
 void IniciaQuadro();
 void DesenhaQuadro();

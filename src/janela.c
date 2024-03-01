@@ -1,5 +1,5 @@
 #include <raylib.h>
-#include "graphics.h"
+#include "janela.h"
 #include "defines.h"
 
 RenderTexture2D render;
@@ -17,7 +17,6 @@ void IniciaJanela()
 
 	InitWindow(windowWidth, windowHeight, "Os Labirintos do INF"); // Inicialização da janela
 	SetWindowMinSize(RES_X, RES_Y);
-	SetTargetFPS(60);
 
 	// Inicializa a textura de renderização, usada para guardar o resultado da renderização
 	// para ser possível redimensionar a janela sem alterar a resolução do jogo
@@ -41,6 +40,15 @@ void FechaJanela()
 	UnloadRenderTexture(render); // Descarrega a textura de renderização
 	CloseWindow();
 	//CloseAudioDevice();
+}
+
+void AtualizaFPS(int *monitor)
+{
+	int novo_monitor = GetCurrentMonitor();
+	if(novo_monitor != *monitor){
+		SetTargetFPS(GetMonitorRefreshRate(novo_monitor));
+		*monitor = novo_monitor;
+	}
 }
 
 void IniciaQuadro()
@@ -90,13 +98,6 @@ void TelaCheia()
 {
  	if (IsKeyPressed(KEY_F11))
 	{
-		int display = GetCurrentMonitor();
-
-		if (IsWindowFullscreen())
-			SetWindowSize(RES_X, RES_Y);
-		else
-			SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
-
- 	ToggleFullscreen();
+ 		ToggleFullscreen();
 	}
 }
