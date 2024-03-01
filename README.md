@@ -34,7 +34,7 @@ Prof. Santiago V. Ravelo
  - [x] Crédito
 ---
  - [X] Saída do labirinto
- - [ ] Pontuação
+ - [x] Pontuação
  - [x] Níveis de dificuldade
 ---
 
@@ -42,9 +42,7 @@ Prof. Santiago V. Ravelo
 
 ### /res:
 
-É onde ficam os sprites e aúdios do jogo.
-
-(Coloquei um spritesheet que acho que ficaria bem no jogo, mas ainda não mexi com isso no raylib.)
+É onde ficam os sprites do jogo.
 
 ### /src:
 
@@ -54,7 +52,7 @@ Prof. Santiago V. Ravelo
 
 Código base do jogo, chama as funções dos outros arquivos.
 
-### graphics.c
+### janela.c
 
 Código da parte gráfica de inicializar/fechar a janela do jogo e de usar uma "resolução interna".
 
@@ -62,6 +60,14 @@ Código da parte gráfica de inicializar/fechar a janela do jogo e de usar uma "
 
 Código de tudo relacionado ao menu: tela inicial, dos ganhadores e de informações.
 
-### game.c
+### game.c:
 
-Código do "jogo em si". Provavelmente será possível dividir em mais arquivos.
+Código do "jogo em si". Chama as funções dos arquivos jogador.c, professores.c, perguntas.c, labirintos.c, desenha.c.
+
+### desenha.c:
+
+Código para exibir o estado do jogo na tela.
+
+### defines.h:
+
+Arquivo com todas as constantes usadas no jogo.
