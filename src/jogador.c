@@ -46,15 +46,25 @@ bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase)
 
 		// Se pressionou duas teclas, move-se para direção diferente da anterior
 		if(jogador->movX != 0 && jogador->movY != 0){
-			if(ultimo_mov == 'X')
+			if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y] == 1 ||
+			   fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y] == 7)
 				jogador->movX = 0;
-			if(ultimo_mov == 'Y')
+			if(fase->labirinto.m[jogador->pos.x][jogador->pos.y + jogador->movY] == 1 ||
+			   fase->labirinto.m[jogador->pos.x][jogador->pos.y + jogador->movY] == 7)
+				jogador->movY = 0;
+
+			if(ultimo_mov == 'X' && jogador->movY != 0)
+				jogador->movX = 0;
+
+			if(ultimo_mov == 'Y' && jogador->movX != 0)
 				jogador->movY = 0;
 		}
 
 		// Se o jogador ocupará a posição de um crédito após o movimento, aumentar em 1 o número de créditos
-		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 5)
+		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 5){
 			jogador->creditos++;
+			jogador->total_creditos++;
+		}
 
 		// Se o jogador ocupará a posição de uma estátua após o movimento, chamar a pergunta
 		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 4)
@@ -73,11 +83,14 @@ bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase)
 			fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 0;
 			jogador->pos.x += jogador->movX;
 			jogador->pos.y += jogador->movY;
+		} else {
+			jogador->movX = 0;
+			jogador->movY = 0;
 		}
 		fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 2;
 
 		// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
-		jogador->cooldown = 0.05;
+		jogador->cooldown = COOLDOWN_JOGADOR;
 	}
 	return perguntar;
 }
