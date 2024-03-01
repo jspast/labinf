@@ -1,14 +1,14 @@
 #include <raylib.h>
 #include <stdio.h>
+#include "defines.h"
 #include "game.h"
 #include "menu.h"
-#include "defines.h"
+#include "desenha.h"
 
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
 bool SalvarJogo(SAVE jogo_atual);
 
 int Pause(int *opcao_selecionada);
-void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[]);
 void CalculaPontuacao(JOGADOR *jogador);
 void RecompensaColega(JOGADOR *jogador);
 
@@ -23,7 +23,7 @@ int opcao_selecionada = 0;
 int pergunta_aleatoria;
 
 // Lógica principal do jogo
-int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual)
+ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual)
 {
 	int acao_pause = 5;
 	bool passar_fase = false;
@@ -35,6 +35,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	// JOGO
 	case 0:
 		// Calcula o tempo de jogo
+		jogador->tempo_total += GetFrameTime();
 		jogador->tempo_restante -= GetFrameTime();
 
 		if(jogador->vida <= 0 || jogador->tempo_restante <= 0){
@@ -72,9 +73,8 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 			*estado = 2;
 		}
 
-		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
 		CalculaPontuacao(jogador);
-		DesenhaIndicadores(*jogador, *fase, texturas);
+		DesenhaJogo(*fase, *jogador, professores, texturas);
 
 		if(IsKeyPressed(KEY_ESCAPE)){
 			opcao_selecionada = 0;
@@ -84,8 +84,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	//------------------------------------------------------------------------------------
 	// PAUSE
 	case 1:
-		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase, texturas);
+		DesenhaJogo(*fase, *jogador, professores, texturas);
 
 		if(IsKeyPressed(KEY_ESCAPE))
 			*estado = 0;
@@ -120,8 +119,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	//------------------------------------------------------------------------------------
 	// PERGUNTA PROFESSOR
 	case 2:
-		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase, texturas);
+		DesenhaJogo(*fase, *jogador, professores, texturas);
 
 		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
 		// Se errou
@@ -143,8 +141,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	//------------------------------------------------------------------------------------
 	// PERGUNTA COLEGA
 	case 3:
-		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase, texturas);
+		DesenhaJogo(*fase, *jogador, professores, texturas);
 
 		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
 		// Se errou
@@ -167,8 +164,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	//------------------------------------------------------------------------------------
 	// DERROTA
 	case 4:
-		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase, texturas);
+		DesenhaJogo(*fase, *jogador, professores, texturas);
 
 		switch(Derrota(&opcao_selecionada)){
 		// Se a opção pressionada foi reiniciar
@@ -196,8 +192,7 @@ int Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PER
 	//------------------------------------------------------------------------------------
 	// VITORIA
 	case 5:
-		DesenhaLabirinto(fase->labirinto, *jogador, texturas);
-		DesenhaIndicadores(*jogador, *fase, texturas);
+		DesenhaJogo(*fase, *jogador, professores, texturas);
 
 		switch(Vitoria(&opcao_selecionada)){
 		// Se a opção pressionada foi novo jogo
@@ -400,51 +395,31 @@ int Pause(int *opcao_selecionada)
 	return acao;
 }
 
-// Desenha a HUD com as informações do jogador e da fase
-void DesenhaIndicadores(JOGADOR jogador, FASE fase, Texture2D texturas[])
-{
-	int i;
-
-	DrawText("Vida:", 10, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
-	DrawText(TextFormat("%d", jogador.vida), 10, INDICADORES_Y2, FONTE_INDICADORES, COR_INDICADORES);
-
-	DrawText("Tempo:", 100, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
-	DrawText(TextFormat("%4.2f", jogador.tempo_restante), 100, INDICADORES_Y2, FONTE_INDICADORES, COR_INDICADORES);
-
-	DrawText("Créditos:", 210, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
-	DrawText(TextFormat("%d/%d", jogador.creditos, fase.min_creditos), 210, INDICADORES_Y2, FONTE_INDICADORES, COR_INDICADORES);
-
-	DrawText("Labirinto:", 340, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
-	DrawText(TextFormat("%d", jogador.labirinto), 340, INDICADORES_Y2, FONTE_INDICADORES, COR_INDICADORES);
-
-	DrawText("Pontuação:", 480, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
-	DrawText(TextFormat("%d", jogador.pontuacao), 480, INDICADORES_Y2, FONTE_INDICADORES, COR_INDICADORES);
-
-	DrawText("Inventário:", 640, INDICADORES_Y, FONTE_INDICADORES, COR_INDICADORES);
-	for(i = 0; i < jogador.bombas; i++)
-		DrawTexture(texturas[5], 640 + (i * 16), INDICADORES_Y2, WHITE);
-}
 
 // Calcula a pontuação total acumulada pelo aluno
 void CalculaPontuacao(JOGADOR *jogador)
 {
-	// Fórmula simplificada (só considera créditos e tempo do labirinto atual)
-	jogador->pontuacao = 10 * MAX_CREDITOS * jogador->labirinto * jogador->creditos * jogador->tempo_restante;
+	int termo2 = 0;
+
+	if(jogador->tempo_total / 60 != 0)
+		termo2 = jogador->total_creditos / (jogador->tempo_total / 60);
+	
+	jogador->pontuacao = 10 * MAX_CREDITOS * jogador->labirinto + termo2;
 }
 
 // Define uma recompensa aleatória ao jogador por salvar o colega
 void RecompensaColega(JOGADOR *jogador){
 
 	switch(GetRandomValue(0, 2)){
-			case 0:
-				jogador->vida++;
-				break;
-			case 1:
-				jogador->tempo_restante += 20;
-				break;
-			case 2:
-				jogador->bombas++;
-				break;
+		case 0:
+			jogador->vida++;
+			break;
+		case 1:
+			jogador->tempo_restante += 20;
+			break;
+		case 2:
+			jogador->bombas++;
+			break;
 	}
 }
 
