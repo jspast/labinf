@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <stdlib.h>
+#include <math.h>
 #include "game.h"
 #include "defines.h"
 

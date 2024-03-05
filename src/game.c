@@ -4,6 +4,7 @@
 #include "game.h"
 #include "menu.h"
 #include "desenha.h"
+#include "ganhadores.h"
 
 bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
 bool SalvarJogo(SAVE jogo_atual);
@@ -13,7 +14,7 @@ void CalculaPontuacao(JOGADOR *jogador);
 void RecompensaColega(JOGADOR *jogador);
 
 int Derrota(int *opcao_selecionada);
-int Vitoria(int *opcao_selecionada);
+int Vitoria(int pontuacao, int *opcao_selecionada);
 
 int CarregaColegas(POSICAO colegas[]);
 void PosicionaColegas(FASE *fase);
@@ -23,7 +24,7 @@ int opcao_selecionada = 0;
 int pergunta_aleatoria;
 
 // Lógica principal do jogo
-ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual)
+ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual, int *num_letras, char nome[], GANHADOR ganhadores[])
 {
 	int acao_pause = 5;
 	bool passar_fase = false;
@@ -194,7 +195,16 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 	case 5:
 		DesenhaJogo(*fase, *jogador, professores, texturas);
 
-		switch(Vitoria(&opcao_selecionada)){
+		if(VerificaGanhador(ganhadores, jogador->pontuacao, num_letras, nome))
+			*estado = 6;
+		else
+			*estado = 5;
+		break;
+
+	case 6:
+		DesenhaJogo(*fase, *jogador, professores, texturas);
+
+		switch(Vitoria(jogador->pontuacao, &opcao_selecionada)){
 		// Se a opção pressionada foi novo jogo
 		case 0:
 			*estado = 0;
@@ -202,12 +212,12 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 			acao_pause = 3;
 			break;
 		// Se a opção pressionada foi sair
-		case 2:
+		case 1:
 			acao_pause = -1;
 			break;
 		// Se não respondeu ainda
 		default:
-			*estado = 5;
+			*estado = 6;
 			break;
 		}
 		break;
@@ -439,14 +449,15 @@ int Derrota(int *opcao_selecionada)
 	return acao;
 }
 
-// Tela de derrota
-int Vitoria(int *opcao_selecionada)
+// Tela de vitória
+int Vitoria(int pontuacao, int *opcao_selecionada)
 {
+	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
+
 	int acao = -1;
 	char opcoes[2][TAM_MAX_OPCOES] = {"Novo Jogo", "Sair"};
 	char vitoria[10] = "VITÓRIA";
 
-	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
 	DrawText(vitoria, (RES_X - MeasureText(vitoria, FONTE_TITULO))/2, 50, FONTE_TITULO, GREEN);
 
 	acao = Selecao(opcao_selecionada, 2);

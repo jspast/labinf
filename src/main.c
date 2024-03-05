@@ -3,6 +3,7 @@
 #include "janela.h"
 #include "game.h"
 #include "defines.h"
+#include "ganhadores.h"
 
 int main()
 {
@@ -10,6 +11,8 @@ int main()
 	int dificuldade;
 	int opcao_selecionada = 0;
 	int estado_jogo = 0;
+	int num_letras = 0;
+	char nome[TAM_MAX_NOME] = "";
 
 	ESTADO estado = MENU;
 	FASE fase_atual;
@@ -17,6 +20,7 @@ int main()
 	PROFESSOR professores[MAX_PROFESSORES] = {0};
 	PERGUNTA perguntas[MAX_PERGUNTAS];
 	SAVE jogo_atual;
+	GANHADOR ganhadores[MAX_GANHADORES];
 
 	// Carrega as perguntas do arquivo guardando o número de perguntas
 	int num_perguntas = CarregaPerguntas(perguntas);
@@ -46,7 +50,7 @@ int main()
 			break;
 		//------------------------------------------------------------------------------------
 		case GANHADORES:
-			if(MenuGanhadores() == 1)
+			if(MenuGanhadores())
 				estado = MENU;
 			break;
 		//------------------------------------------------------------------------------------
@@ -73,7 +77,7 @@ int main()
 			break;
 		//------------------------------------------------------------------------------------
 		case JOGO:
-			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas, &jogo_atual);
+			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas, &jogo_atual, &num_letras, nome, ganhadores);
 			break;
 		//------------------------------------------------------------------------------------
 		case ERRO:

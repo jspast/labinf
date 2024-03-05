@@ -19,7 +19,7 @@ Prof. Santiago V. Ravelo
  - [x] Arquivo binário de save
  - [x] Arquivo binário dos labirintos
  - [ ] Arquivo binário das estátuas
- - [ ] Arquivo binário dos ganhadores
+ - [x] Arquivo binário dos ganhadores
  - [x] Arquivo de texto das perguntas
 ---
  - [x] Interface nos labirintos

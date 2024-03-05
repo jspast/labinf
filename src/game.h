@@ -3,7 +3,7 @@
 
 #include <raylib.h>
 #include "defines.h"
-#include <math.h>
+#include "ganhadores.h"
 
 typedef enum{
 	MENU = 0,
@@ -79,7 +79,7 @@ typedef struct{
 bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual);
 bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual);
 
-ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual);
+ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual, int *num_letras, char nome[], GANHADOR ganhadores[]);
 
 bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase);
 void JogarBomba(JOGADOR *jogador, FASE *fase);

@@ -26,7 +26,7 @@
 #define TAM_MAX_OPCOES 50
 #define NUM_OPCOES 5
 #define NUM_INFORMACOES 7
-#define NUM_GANHADORES 10
+#define MAX_GANHADORES 10
 #define NUM_DIFICULDADES 3   
 
 #define NUM_OPCOES 5
@@ -53,5 +53,7 @@
 
 #define COOLDOWN_JOGADOR 0.05
 #define COOLDOWN_PROFESSOR 0.03
+
+#define TAM_MAX_NOME 50
 
 #endif

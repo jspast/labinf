@@ -47,36 +47,6 @@ int MenuInicial(int *opcao_selecionada)
 	return menu_acao;
 }
 
-// Tela dos ganhadores
-bool MenuGanhadores()
-{
-	bool sair = false;
-
-			/*
-
-			Carregar ganhadores do arquivo...
-
-			*/
-
-	if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
-		sair = true;
-
-	GANHADOR ganhadores[NUM_GANHADORES] = {{"Santiago", 1234567890},{"Ribas", 10101011}};
-	int i;
-
-	for(i = 0; i < NUM_GANHADORES; i++){
-		DrawText(TextFormat("%d", ganhadores[i].pontuacao),
-			50,
-			(RES_Y - (NUM_GANHADORES * FONTE_OPCOES + (NUM_GANHADORES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
-			FONTE_OPCOES, LIGHTGRAY);
-		DrawText(ganhadores[i].nome,
-			200,
-			(RES_Y - (NUM_GANHADORES * FONTE_OPCOES + (NUM_GANHADORES - 1) * ESPACAMENTO))/2 + i * (FONTE_OPCOES + ESPACAMENTO),
-			FONTE_OPCOES, LIGHTGRAY);
-	}
-	return sair;
-}
-
 // Tela das informações
 bool MenuInformacoes(Texture2D texturas[])
 {
