@@ -56,4 +56,7 @@
 
 #define TAM_MAX_NOME 50
 
+#define NUM_MUSICAS 1
+#define NUM_SONS 15
+
 #endif

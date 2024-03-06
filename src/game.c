@@ -6,15 +6,10 @@
 #include "desenha.h"
 #include "ganhadores.h"
 
-bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual);
 bool SalvarJogo(SAVE jogo_atual);
 
-int Pause(int *opcao_selecionada);
 void CalculaPontuacao(JOGADOR *jogador);
 void RecompensaColega(JOGADOR *jogador);
-
-int Derrota(int *opcao_selecionada);
-int Vitoria(int pontuacao, int *opcao_selecionada);
 
 int CarregaColegas(POSICAO colegas[]);
 void PosicionaColegas(FASE *fase);
@@ -24,7 +19,7 @@ int opcao_selecionada = 0;
 int pergunta_aleatoria;
 
 // Lógica principal do jogo
-ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual, int *num_letras, char nome[], GANHADOR ganhadores[])
+ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual, int *num_letras, char nome[], GANHADOR ganhadores[], Sound sons[])
 {
 	int acao_pause = 5;
 	bool passar_fase = false;
@@ -42,6 +37,7 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 		if(jogador->vida <= 0 || jogador->tempo_restante <= 0){
 			*estado = 4;
 			opcao_selecionada = 0;
+			PlaySound(sons[9]);
 			//SalvaEstatua(*jogador);
 		}
 
@@ -49,21 +45,25 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 			JogarBomba(jogador, fase);
 
 		// Verifica se, na movimentação, o jogador encostou num colega
-		if(MovimentacaoJogador(jogador, fase, &passar_fase))
+		if(MovimentacaoJogador(jogador, fase, &passar_fase, sons))
 		{
 			pergunta_aleatoria = GetRandomValue(0, num_perguntas - 1);
 			opcao_selecionada = 0;
 			*estado = 3;
+			PlaySound(sons[4]);
+
 		}
 
 		// De acordo com a movimentação analisada, verifica se o jogador passou de fase
 		if(passar_fase)
 		{
 			jogo_atual->fase++;
-			if(jogo_atual->fase == NUM_MAX_FASES)
+			if(jogo_atual->fase == NUM_MAX_FASES) {
 				*estado = 5;
+				PlaySound(sons[8]);
+			}
 			else
-				IniciaFase(fase, jogador, professores, *jogo_atual);
+				IniciaFase(fase, jogador, professores, *jogo_atual, sons);
 		}
 
 		// Verifica se, na atualização, um professor encostou no jogador
@@ -72,6 +72,7 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 			pergunta_aleatoria = GetRandomValue(0, num_perguntas - 1);
 			opcao_selecionada = 0;
 			*estado = 2;
+			PlaySound(sons[3]);
 		}
 
 		CalculaPontuacao(jogador);
@@ -90,7 +91,7 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 		if(IsKeyPressed(KEY_ESCAPE))
 			*estado = 0;
 		else
-			acao_pause = Pause(&opcao_selecionada);
+			acao_pause = Pause(&opcao_selecionada, sons);
 
 		switch(acao_pause){
 		// Se a opção pressionada foi voltar
@@ -108,7 +109,7 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 		case 2:
 			*estado = 0;
 			acao_pause = 5;
-			IniciaFase(fase, jogador, professores, *jogo_atual);
+			IniciaFase(fase, jogador, professores, *jogo_atual, sons);
 			break;
 		// Se a opção pressionada foi novo jogo
 		case 3:
@@ -122,7 +123,7 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 	case 2:
 		DesenhaJogo(*fase, *jogador, professores, texturas);
 
-		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
+		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada, sons)){
 		// Se errou
 		case 0:
 			jogador->vida--;
@@ -144,7 +145,7 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 	case 3:
 		DesenhaJogo(*fase, *jogador, professores, texturas);
 
-		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada)){
+		switch(Pergunta(perguntas, pergunta_aleatoria, &opcao_selecionada, sons)){
 		// Se errou
 		case 0:
 			*estado = 0;
@@ -167,12 +168,12 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 	case 4:
 		DesenhaJogo(*fase, *jogador, professores, texturas);
 
-		switch(Derrota(&opcao_selecionada)){
+		switch(Derrota(&opcao_selecionada, sons)){
 		// Se a opção pressionada foi reiniciar
 		case 0:
 			*estado = 0;
 			acao_pause = 5;
-			IniciaFase(fase, jogador, professores, *jogo_atual);
+			IniciaFase(fase, jogador, professores, *jogo_atual, sons);
 			break;
 		// Se a opção pressionada foi novo jogo
 		case 1:
@@ -204,7 +205,7 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 	case 6:
 		DesenhaJogo(*fase, *jogador, professores, texturas);
 
-		switch(Vitoria(jogador->pontuacao, &opcao_selecionada)){
+		switch(Vitoria(jogador->pontuacao, &opcao_selecionada, sons)){
 		// Se a opção pressionada foi novo jogo
 		case 0:
 			*estado = 0;
@@ -227,8 +228,10 @@ ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], 
 }
 
 // Inicia uma fase com as informações do SAVE
-bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual)
+bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual, Sound sons[])
 {
+	PlaySound(sons[2]);
+
 	int i, j;
 
 	if(!CarregaFase(fase, jogo_atual.fase))
@@ -329,16 +332,16 @@ int CarregaColegas(POSICAO colegas[])
 }
 
 // Inicia um jogo com a dificuldade fornecida
-bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual)
+bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual, Sound sons[])
 {
 	jogo_atual->fase = 0;
 	jogo_atual->dificuldade = dificuldade;
 
-	return IniciaFase(fase, jogador, professores, *jogo_atual);
+	return IniciaFase(fase, jogador, professores, *jogo_atual, sons);
 }
 
 // Inicia um jogo com os parâmetros salvos no arquivo de save
-bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual)
+bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual, Sound sons[])
 {
 	FILE *arq;
 
@@ -348,7 +351,7 @@ bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jo
 	else
 		fread(jogo_atual, sizeof(SAVE), 1, arq);
 
-	return IniciaFase(fase, jogador, professores, *jogo_atual);
+	return IniciaFase(fase, jogador, professores, *jogo_atual, sons);
 
 }
 
@@ -366,12 +369,12 @@ bool SalvarJogo(SAVE jogo_atual)
 }
 
 // Lógica do menu de pause
-int Pause(int *opcao_selecionada)
+int Pause(int *opcao_selecionada, Sound sons[])
 {
 	int acao;
 	char opcoes_pause[NUM_OPCOES][TAM_MAX_OPCOES] = {"Voltar", "Salvar", "Reiniciar", "Novo Jogo", "Sair"};
 
-	acao = Selecao(opcao_selecionada, NUM_OPCOES);
+	acao = Selecao(opcao_selecionada, NUM_OPCOES, sons);
 
 	// Desenha fundo para as opções de pause
 	DrawRectangle(RES_X/2 - 100, RES_Y/2 - 100, 200, 200, COR_FUNDO);
@@ -434,7 +437,7 @@ void RecompensaColega(JOGADOR *jogador){
 }
 
 // Tela de derrota
-int Derrota(int *opcao_selecionada)
+int Derrota(int *opcao_selecionada, Sound sons[])
 {
 	int acao = -1;
 	char opcoes[3][TAM_MAX_OPCOES] = {"Reiniciar", "Novo Jogo", "Sair"};
@@ -443,14 +446,14 @@ int Derrota(int *opcao_selecionada)
 	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
 	DrawText(derrota, (RES_X - MeasureText(derrota, FONTE_TITULO))/2, 50, FONTE_TITULO, RED);
 
-	acao = Selecao(opcao_selecionada, 3);
+	acao = Selecao(opcao_selecionada, 3, sons);
 	DesenhaSelecao(*opcao_selecionada, 3, opcoes);
 
 	return acao;
 }
 
 // Tela de vitória
-int Vitoria(int pontuacao, int *opcao_selecionada)
+int Vitoria(int pontuacao, int *opcao_selecionada, Sound sons[])
 {
 	DrawRectangle(0, 0, RES_X, RES_Y, COR_FUNDO);
 
@@ -460,7 +463,7 @@ int Vitoria(int pontuacao, int *opcao_selecionada)
 
 	DrawText(vitoria, (RES_X - MeasureText(vitoria, FONTE_TITULO))/2, 50, FONTE_TITULO, GREEN);
 
-	acao = Selecao(opcao_selecionada, 2);
+	acao = Selecao(opcao_selecionada, 2, sons);
 	DesenhaSelecao(*opcao_selecionada, 2, opcoes);
 
 	return acao;

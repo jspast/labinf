@@ -5,7 +5,6 @@
 #include "defines.h"
 
 int CarregaPerguntas(PERGUNTA perguntas[]);
-int Pergunta(PERGUNTA perguntas[], int num_perguntas, int *alt_selecionada);
 
 /* Preenche o vetor de perguntas com as perguntas do arquivo de texto
  * Formatação das perguntas:
@@ -40,20 +39,24 @@ int CarregaPerguntas(PERGUNTA perguntas[])
 }
 
 // Mecânica das perguntas
-int Pergunta(PERGUNTA perguntas[], int aleatorio, int *alt_selecionada)
+int Pergunta(PERGUNTA perguntas[], int aleatorio, int *alt_selecionada, Sound sons[])
 {
 	int resposta;
 	int acertou = -1;
 
 	// Lógica da seleção da alternativa
-	resposta = Selecao(alt_selecionada, perguntas[aleatorio].num_alternativas);
+	resposta = Selecao(alt_selecionada, perguntas[aleatorio].num_alternativas, sons);
 
 	// Verifica acerto
 	if(resposta != -1){
-		if(resposta + 1 == perguntas[aleatorio].alternativa_correta)
+		if(resposta + 1 == perguntas[aleatorio].alternativa_correta){
 			acertou = 1;
-		else
+			PlaySound(sons[5]);
+		}
+		else {
 			acertou = 0;
+			PlaySound(sons[6]);
+		}
 	}
 
 	// Desenha fundo para a pergunta

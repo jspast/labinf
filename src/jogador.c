@@ -15,7 +15,7 @@ bool CreditoSuficiente(JOGADOR *jogador, FASE *fase) {
 }
 
 // Mecânica da movimentação do jogador
-bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase)
+bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase, Sound sons[])
 {
 	bool perguntar = false;
 	char ultimo_mov;
@@ -64,6 +64,7 @@ bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase)
 		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] == 5){
 			jogador->creditos++;
 			jogador->total_creditos++;
+			PlaySound(sons[7]);
 		}
 
 		// Se o jogador ocupará a posição de uma estátua após o movimento, chamar a pergunta
@@ -78,19 +79,20 @@ bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase)
 		if(fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] != 1 &&
 		   fase->labirinto.m[jogador->pos.x + jogador->movX][jogador->pos.y + jogador->movY] != 7 &&
 		   jogador->pos.x + jogador->movX != -1 && jogador->pos.x + jogador->movX != fase->labirinto.tamX &&
-		   jogador->pos.y + jogador->movY != -1 && jogador->pos.y + jogador->movY != fase->labirinto.tamY)
+		   jogador->pos.y + jogador->movY != -1 && jogador->pos.y + jogador->movY != fase->labirinto.tamY &&
+		   (jogador->movX != 0 || jogador->movY != 0))
 		{
 			fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 0;
 			jogador->pos.x += jogador->movX;
 			jogador->pos.y += jogador->movY;
+			PlaySound(sons[GetRandomValue(10, 14)]);
+			// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
+			jogador->cooldown = COOLDOWN_JOGADOR;
 		} else {
 			jogador->movX = 0;
 			jogador->movY = 0;
 		}
 		fase->labirinto.m[jogador->pos.x][jogador->pos.y] = 2;
-
-		// Controla a velocidade da movimentação pelo tempo de espera entre os movimentos
-		jogador->cooldown = COOLDOWN_JOGADOR;
 	}
 	return perguntar;
 }

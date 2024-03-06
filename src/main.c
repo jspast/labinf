@@ -4,6 +4,7 @@
 #include "game.h"
 #include "defines.h"
 #include "ganhadores.h"
+#include "audio.h"
 
 int main()
 {
@@ -13,6 +14,7 @@ int main()
 	int estado_jogo = 0;
 	int num_letras = 0;
 	char nome[TAM_MAX_NOME] = "";
+	char musica_atual = 0;
 
 	ESTADO estado = MENU;
 	FASE fase_atual;
@@ -32,7 +34,15 @@ int main()
 	Texture2D texturas[NUM_TEXTURAS];
 	CarregaTexturas(texturas);
 
+	Sound sons[NUM_SONS];
+	Music musicas[NUM_MUSICAS];
+	CarregaAudio(musicas, sons);
+	SetMasterVolume(0.5);
+
 	while(!WindowShouldClose() && estado != FIM){
+
+		PlayMusicStream(musicas[musica_atual]);
+		UpdateMusicStream(musicas[musica_atual]);
 
 		AtualizaFPS(&monitor);
 
@@ -46,7 +56,7 @@ int main()
 		switch(estado){
 		//-----------------------------------------------------------------------------------
 		case MENU:
-			estado = MenuInicial(&opcao_selecionada);
+			estado = MenuInicial(&opcao_selecionada, sons);
 			break;
 		//------------------------------------------------------------------------------------
 		case GANHADORES:
@@ -60,9 +70,9 @@ int main()
 			break;
 		//------------------------------------------------------------------------------------
 		case NOVO_JOGO:
-			dificuldade = (MenuNovoJogo(&opcao_selecionada));
+			dificuldade = (MenuNovoJogo(&opcao_selecionada, sons));
 			if(dificuldade != -1){
-				if(NovoJogo(&jogador, &fase_atual, professores, dificuldade, &jogo_atual))
+				if(NovoJogo(&jogador, &fase_atual, professores, dificuldade, &jogo_atual, sons))
 					estado = JOGO;
 				else
 					estado = ERRO;
@@ -70,14 +80,14 @@ int main()
 			break;
 		//------------------------------------------------------------------------------------
 		case CARREGA_JOGO:
-			if(CarregaJogo(&jogador, &fase_atual, professores, &jogo_atual))
+			if(CarregaJogo(&jogador, &fase_atual, professores, &jogo_atual, sons))
 				estado = JOGO;
 			else
 				estado = ERRO;
 			break;
 		//------------------------------------------------------------------------------------
 		case JOGO:
-			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas, &jogo_atual, &num_letras, nome, ganhadores);
+			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas, &jogo_atual, &num_letras, nome, ganhadores, sons);
 			break;
 		//------------------------------------------------------------------------------------
 		case ERRO:
@@ -94,6 +104,8 @@ int main()
 	}
 
 	FechaTexturas(texturas);
+	FechaAudio(musicas, sons);
+
 	FechaJanela();
 
 	return 0;

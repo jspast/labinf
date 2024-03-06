@@ -76,19 +76,25 @@ typedef struct{
 	char alternativas[NUM_MAX_ALTERNATIVAS][TAM_MAX_ALTERNATIVAS];
 } PERGUNTA;
 
-bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual);
-bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual);
+bool NovoJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], int dificuldade, SAVE *jogo_atual, Sound sons[]);
+bool CarregaJogo(JOGADOR *jogador, FASE *fase, PROFESSOR professores[], SAVE *jogo_atual, Sound sons[]);
 
-ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual, int *num_letras, char nome[], GANHADOR ganhadores[]);
+ESTADO Jogo(int *estado, JOGADOR *jogador, FASE *fase, PROFESSOR professores[], PERGUNTA perguntas[], int num_perguntas, Texture2D texturas[], SAVE *jogo_atual, int *num_letras, char nome[], GANHADOR ganhadores[], Sound sons[]);
 
-bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase);
+bool MovimentacaoJogador(JOGADOR *jogador, FASE *fase, bool *passar_fase, Sound sons[]);
 void JogarBomba(JOGADOR *jogador, FASE *fase);
 bool AtualizaProfessores(PROFESSOR professores[], JOGADOR jogador, FASE *fase);
 
 bool CarregaFase(FASE *fase_atual, int num_fase);
 
 int CarregaPerguntas(PERGUNTA perguntas[]);
-int Pergunta(PERGUNTA perguntas[], int num_perguntas, int *alt_selecionada);
+int Pergunta(PERGUNTA perguntas[], int aleatorio, int *alt_selecionada, Sound sons[]);
+
+int Pause(int *opcao_selecionada, Sound sons[]);
+int Derrota(int *opcao_selecionada, Sound sons[]);
+int Vitoria(int pontuacao, int *opcao_selecionada, Sound sons[]);
+
+bool IniciaFase(FASE *fase, JOGADOR *jogador, PROFESSOR professores[], SAVE jogo_atual, Sound sons[]);
 
 #endif
 

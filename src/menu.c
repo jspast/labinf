@@ -3,7 +3,7 @@
 #include "defines.h"
 
 // Tela inicial
-int MenuInicial(int *opcao_selecionada)
+int MenuInicial(int *opcao_selecionada, Sound sons[])
 {
 	int menu_acao;
 
@@ -11,7 +11,7 @@ int MenuInicial(int *opcao_selecionada)
 	char opcoes[NUM_OPCOES][TAM_MAX_OPCOES] = {"Novo Jogo","Carregar Jogo","Exibir Ganhadores","Informações","Sair"};
 	Vector2 pos_titulo = {(RES_X - MeasureText(titulo, FONTE_TITULO))/2.0, 50};
 
-	menu_acao = Selecao(opcao_selecionada, NUM_OPCOES);
+	menu_acao = Selecao(opcao_selecionada, NUM_OPCOES, sons);
 
 	DrawText(titulo, pos_titulo.x, pos_titulo.y, FONTE_TITULO, COR_TITULO);
 	DesenhaSelecao(*opcao_selecionada, NUM_OPCOES, opcoes);
@@ -70,12 +70,12 @@ bool MenuInformacoes(Texture2D texturas[])
 }
 
 // Tela da dificuldade do novo jogo
-int MenuNovoJogo(int *opcao_selecionada){
-
+int MenuNovoJogo(int *opcao_selecionada, Sound sons[])
+{
 	int dificuldade = -1;
 	char dificuldades[3][TAM_MAX_OPCOES] = {"Fácil", "Médio", "Difícil"};
 
-	dificuldade = Selecao(opcao_selecionada, NUM_DIFICULDADES);
+	dificuldade = Selecao(opcao_selecionada, NUM_DIFICULDADES, sons);
 
 	DesenhaSelecao(*opcao_selecionada, NUM_DIFICULDADES, dificuldades);
 
@@ -83,14 +83,20 @@ int MenuNovoJogo(int *opcao_selecionada){
 }
 
 // Gera lista de seleção
-int Selecao(int *opcao_selecionada, int num_opcoes){
-
-	if(IsKeyPressed(KEY_DOWN) && *opcao_selecionada < num_opcoes - 1)
+int Selecao(int *opcao_selecionada, int num_opcoes, Sound sons[])
+{
+	if(IsKeyPressed(KEY_DOWN) && *opcao_selecionada < num_opcoes - 1){
 		(*opcao_selecionada)++;
-	if(IsKeyPressed(KEY_UP) && *opcao_selecionada > 0)
+		PlaySound(sons[0]);
+	}
+	if(IsKeyPressed(KEY_UP) && *opcao_selecionada > 0){
 		(*opcao_selecionada)--;
-	if(IsKeyPressed(KEY_ENTER))
+		PlaySound(sons[0]);
+	}
+	if(IsKeyPressed(KEY_ENTER)){
+		PlaySound(sons[1]);
 		return *opcao_selecionada;
+	}
 	else
 		return -1;
 }
