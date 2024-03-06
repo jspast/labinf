@@ -11,9 +11,9 @@ void AtualizaFPS(int *monitor);
 void IniciaQuadro();
 void DesenhaQuadro();
 
+void TelaCheia();
+
 void CarregaTexturas(Texture2D texturas[]);
 void FechaTexturas(Texture2D texturas[]);
-
-void TelaCheia();
 
 #endif

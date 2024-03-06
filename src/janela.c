@@ -75,29 +75,32 @@ void DesenhaQuadro()
 	EndDrawing(); // Finaliza o ambiente de desenho na tela
 }
 
-void CarregaTexturas(Texture2D texturas[]){
-
-	texturas[0] = LoadTexture("res/parede.png");
-	texturas[1] = LoadTexture("res/aluno.png");
-	texturas[2] = LoadTexture("res/professor.png");
-	texturas[3] = LoadTexture("res/colega.png");
-	texturas[4] = LoadTexture("res/credito.png");
-	texturas[5] = LoadTexture("res/bomba.png");
-	texturas[6] = LoadTexture("res/saida.png");
-}
-
-void FechaTexturas(Texture2D texturas[]){
-
-	int i;
-
-	for(i = 0; i < 6; i++)
-		UnloadTexture(texturas[i]);
-}
-
 void TelaCheia()
 {
  	if (IsKeyPressed(KEY_F11))
 	{
  		ToggleFullscreen();
 	}
+}
+
+void CarregaTexturas(Texture2D texturas[])
+{
+	ChangeDirectory("res/sprites");
+	texturas[0] = LoadTexture("parede.png");
+	texturas[1] = LoadTexture("aluno.png");
+	texturas[2] = LoadTexture("professor.png");
+	texturas[3] = LoadTexture("colega.png");
+	texturas[4] = LoadTexture("credito.png");
+	texturas[5] = LoadTexture("bomba.png");
+	texturas[6] = LoadTexture("saida.png");
+	ChangeDirectory(GetApplicationDirectory());
+
+}
+
+void FechaTexturas(Texture2D texturas[])
+{
+	int i;
+
+	for(i = 0; i < 6; i++)
+		UnloadTexture(texturas[i]);
 }
