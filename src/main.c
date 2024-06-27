@@ -1,112 +1,59 @@
-#include <raylib.h>
-#include "menu.h"
 #include "janela.h"
-#include "game.h"
-#include "defines.h"
-#include "ganhadores.h"
-#include "audio.h"
+#include "jogo.h"
+#include "tipos.h"
+#include <raylib.h>
+
+#if defined(PLATFORM_WEB)
+    #include <emscripten.h>
+#endif
+
+JOGO jogo = {0};
+JANELA janela;
+
+void AtualizaQuadro()
+{
+	AtualizaMusica(&jogo.audio.musica);
+	Logica(&jogo);
+
+	IniciaQuadro(&janela);
+	Desenha(jogo, &janela);
+}
 
 int main()
 {
-	int monitor = -1;
-	int dificuldade;
-	int opcao_selecionada = 0;
-	int estado_jogo = 0;
-	int num_letras = 0;
-	char nome[TAM_MAX_NOME] = "";
-	char musica_atual = 0;
+	ChangeDirectory(GetApplicationDirectory());
+	ChangeDirectory("../..");
 
-	ESTADO estado = MENU;
-	FASE fase_atual;
-	JOGADOR jogador = {0};
-	PROFESSOR professores[MAX_PROFESSORES] = {0};
-	PERGUNTA perguntas[MAX_PERGUNTAS];
-	SAVE jogo_atual;
-	GANHADOR ganhadores[MAX_GANHADORES];
+	jogo.estado.menu = MENU;
 
-	// Carrega as perguntas do arquivo guardando o número de perguntas
-	int num_perguntas = CarregaPerguntas(perguntas);
-	if(!num_perguntas)
-		estado = ERRO;
+	CarregaPerguntas(&jogo.perguntas);
+	if(jogo.perguntas.total == 0)
+		jogo.estado.menu = ERRO_PERGUNTAS;
 
-	IniciaJanela();
+	CarregaColegas(jogo.colegas);
+	CarregaGanhadores(&jogo.ganhadores);
 
-	Texture2D texturas[NUM_TEXTURAS];
-	CarregaTexturas(texturas);
+	IniciaJanela(&janela);
 
-	Sound sons[NUM_SONS];
-	Music musicas[NUM_MUSICAS];
-	CarregaAudio(musicas, sons);
-	SetMasterVolume(0.5);
+	CarregaTexturas(jogo.texturas);
+	CarregaAudio(&jogo.audio);
 
-	while(!WindowShouldClose() && estado != FIM){
+	PlayMusicStream(jogo.audio.musica.musicas[jogo.audio.musica.atual]);
 
-		PlayMusicStream(musicas[musica_atual]);
-		UpdateMusicStream(musicas[musica_atual]);
+#if defined(PLATFORM_WEB)
+    emscripten_set_main_loop(AtualizaQuadro, 0, 1);
+#else
 
-		AtualizaFPS(&monitor);
+	while(!WindowShouldClose() && jogo.estado.menu != FIM){
 
-		IniciaQuadro();
-
-		// Verifica se é para mudar para tela cheia
-		TelaCheia();
-
-		//-----------------------------------------------------------------------------------
-		// Separa a lógica de cada estado do jogo
-		switch(estado){
-		//-----------------------------------------------------------------------------------
-		case MENU:
-			estado = MenuInicial(&opcao_selecionada, sons);
-			break;
-		//------------------------------------------------------------------------------------
-		case GANHADORES:
-			if(MenuGanhadores())
-				estado = MENU;
-			break;
-		//------------------------------------------------------------------------------------
-		case INFORMACOES:
-			if(MenuInformacoes(texturas) == 1)
-				estado = MENU;
-			break;
-		//------------------------------------------------------------------------------------
-		case NOVO_JOGO:
-			dificuldade = (MenuNovoJogo(&opcao_selecionada, sons));
-			if(dificuldade != -1){
-				if(NovoJogo(&jogador, &fase_atual, professores, dificuldade, &jogo_atual, sons))
-					estado = JOGO;
-				else
-					estado = ERRO;
-			}
-			break;
-		//------------------------------------------------------------------------------------
-		case CARREGA_JOGO:
-			if(CarregaJogo(&jogador, &fase_atual, professores, &jogo_atual, sons))
-				estado = JOGO;
-			else
-				estado = ERRO;
-			break;
-		//------------------------------------------------------------------------------------
-		case JOGO:
-			estado = Jogo(&estado_jogo, &jogador, &fase_atual, professores, perguntas, num_perguntas, texturas, &jogo_atual, &num_letras, nome, ganhadores, sons);
-			break;
-		//------------------------------------------------------------------------------------
-		case ERRO:
-			DrawText("Erro ao lidar com arquivos", RES_X/4, RES_Y/2, 30, WHITE);
-			if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
-				estado = FIM;
-			break;
-
-		case FIM:
-			break;
-		}
-
-		DesenhaQuadro();
+		AtualizaQuadro();
 	}
 
-	FechaTexturas(texturas);
-	FechaAudio(musicas, sons);
+#endif
 
-	FechaJanela();
+	FechaTexturas(jogo.texturas);
+	FechaAudio(&jogo.audio);
+	FechaJanela(&janela.render);
 
 	return 0;
 }

@@ -1,4 +1,3 @@
-*.exe
-*.out
-save.dat
-ganhadores.dat
+build/desktop
+data/*
+.vscode

@@ -1,4 +1,4 @@
-# Os-Labirintos-do-INF
+# Os Labirintos do INF
 
 Trabalho Prático Final - Semestre 2023/1
 
@@ -6,68 +6,47 @@ INF01202 - Algoritmos e Programação
 
 Prof. Santiago V. Ravelo
 
----
+## Como jogar
 
-- 28/08/2023 - Entrega
+### Web
+Versão para web disponível [aqui](jspast.github.io/labinf)
 
-## ToDo:
+### Desktop
+É necessário compilar para o seu sistema
 
- - [X] Menu inicial 
- - [x] Informações
- - [x] Ganhadores
----
- - [x] Arquivo binário de save
- - [x] Arquivo binário dos labirintos
- - [ ] Arquivo binário das estátuas
- - [x] Arquivo binário dos ganhadores
- - [x] Arquivo de texto das perguntas
----
- - [x] Interface nos labirintos
- - [X] Menu de pause
- - [x] Interface das perguntas
----
- - [X] Aluno/jogador
- - [x] Professor/guardião
- - [x] Colega/estáta
----
- - [x] Bomba
- - [x] Crédito
----
- - [X] Saída do labirinto
- - [x] Pontuação
- - [x] Níveis de dificuldade
----
+## Como compilar
 
-## Documentação:
+### Linux
 
-### /res:
+**Instale as ferramentas necessárias**:
 
-É onde ficam os sprites do jogo.
+- **gcc**, **make** e **git**
 
-### /src:
+**Clone o repositório**
+```bash
+git clone https://github.com/jspast/labinf
+cd Os-Labirintos-do-INF
+```
 
-É onde fica o código do jogo, dividido em arquivos .c.
+**Compile para a plataforma desejada**
 
-### main.c:
+- **Web**
 
-Código base do jogo, chama as funções dos outros arquivos.
+Para compilar para a Web, é necessário instalar o **emscripten**
 
-### janela.c
+As instruções estão disponíveis no [Github](https://github.com/emscripten-core/emsdk)
 
-Código da parte gráfica de inicializar/fechar a janela do jogo e de usar uma "resolução interna".
+Indique a pasta de instalação do emscripten (emsdk) após EMSDK_PATH=
 
-### menu.c:
+```bash
+make PLATFORM=PLATFORM_WEB EMSDK_PATH=caminho/para/emsdk
+```
 
-Código de tudo relacionado ao menu: tela inicial, dos ganhadores e de informações.
+O resultado da compilação estará em build/web/
 
-### game.c:
+- **Desktop**
+```bash
+make
+```
 
-Código do "jogo em si". Chama as funções dos arquivos jogador.c, professores.c, perguntas.c, labirintos.c, desenha.c.
-
-### desenha.c:
-
-Código para exibir o estado do jogo na tela.
-
-### defines.h:
-
-Arquivo com todas as constantes usadas no jogo.
+O resultado da compilação estará em build/desktop/

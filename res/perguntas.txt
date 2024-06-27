@@ -1,0 +1,603 @@
+Onde nasceu Santiago?
+4 1
+Cuba
+Brasil
+Mexico
+Argentina
+Qual foi o líder do movimento da Inconfidência Mineira?
+4 1
+Tiradentes
+Dom Pedro I
+Zumbi dos Palmares
+Joaquim Nabuco
+Em que ano o Brasil proclamou sua independência de Portugal?
+3 1
+1822
+1500
+1889
+Quem foi o último imperador do Brasil?
+3 1
+Dom Pedro II
+Getúlio Vargas
+Dom João VI
+Qual foi o período em que o Brasil foi uma colônia de Portugal?
+4 1
+Período Colonial
+Era Vargas
+Período Regencial
+Período Republicano
+O que a Proclamação da República em 1889 encerrou no Brasil?
+4 1
+O período imperial
+A Guerra do Paraguai
+A Revolta da Vacina
+O ciclo do açúcar
+Qual presidente brasileiro foi eleito por voto direto após o regime militar?
+5 3
+Juscelino Kubitschek
+Getúlio Vargas
+Fernando Collor
+Fernando Henrique Cardoso
+Luiz Inácio Lula da Silva
+Qual desses movimentos foi liderada por Antonio Conselheiro?
+4 1
+Guerra de Canudos
+Revolta dos Malês
+Revolução Farroupilha
+Sabinada
+Qual foi a assinatura que decretou o fim da escravidão no Brasil?
+3 1
+Lei Áurea
+Lei do Ventre Livre
+Lei dos Sexagenários
+Em que ano o Brasil sediou a Copa do Mundo pela primeira vez?
+3 1
+1950
+1962
+2014
+Qual líder foi fundamental na Revolução Cubana?
+3 2
+Che Guevara
+Fidel Castro
+Fulgencio Batista
+Em que ano ocorreu a Revolução Cubana que levou à tomada de poder por Fidel Castro?
+4 2
+1910
+1959
+1968
+1980
+Qual país foi a principal potência aliada de Cuba durante a Guerra Fria?
+4 1
+União Soviética
+Estados Unidos
+China
+Reino Unido
+Quem era o presidente dos EUA durante a Crise dos Mísseis de Cuba?
+4 1
+John F. Kennedy
+Richard Nixon
+Dwight D. Eisenhower
+Lyndon B. Johnson
+Que sistema político foi estabelecido em Cuba após a Revolução?
+4 1
+Socialismo
+Monarquia
+Capitalismo
+Fascismo
+Qual foi o impacto econômico do embargo dos EUA contra Cuba?
+5 2
+Crescimento econômico
+Dificuldades econômicas
+Abundância de recursos
+Aumento do turismo
+Aumento das exportações
+Qual foi o objetivo da "Campanha de Alfabetização" em Cuba?
+4 2
+Promoção do turismo
+Erradicar o analfabetismo
+Expandir o comércio
+Criar reservas naturais
+Qual evento marcou o início das tensões entre Cuba e os EUA antes da Revolução?
+4 3
+Acordo de Comércio
+Tratado de Paz
+Ataque a Moncada
+Encontro de Líderes
+Qual é a capital de Cuba?
+4 1
+Havana
+Santiago
+Santa Clara
+Cienfuegos
+Qual líder guerrilheiro se juntou a Fidel Castro na luta contra o regime de Fulgencio Batista?
+5 1
+Che Guevara
+José Martí
+Hugo Chávez
+Salvador Allende
+Augusto Sandino
+Qual é o resultado de 7 + 3?
+4 2
+8
+10
+12
+6
+Quanto é 15 - 9?
+4 3
+7
+24
+6
+4
+Qual é o produto de 5 × 4?
+4 1
+20
+9
+16
+25
+Divida 36 por 6.
+3 2
+9
+6
+42
+Quanto é 3 elevado à 4ª potência?
+4 3
+9
+12
+81
+27
+Qual é a raiz quadrada de 64?
+4 1
+8
+16
+6
+4
+Se um livro custa R$20 e outro custa R$15, quanto custam os dois juntos?
+4 1
+R$35
+R$25
+R$30
+R$40
+Quanto é a metade de 50?
+3 1
+25
+30
+20
+Qual é o próximo número na sequência: 2, 4, 6, 8, ...?
+4 4
+18
+11
+9
+10
+Se um pacote contém 12 balas e você comeu 4, quantas balas sobram?
+4 3
+6
+10
+8
+2
+Calcule: 9 + (4 × 2).
+4 1
+17
+18
+20
+13
+Qual é a soma dos números de 1 a 10?
+4 2
+45
+55
+50
+60
+Divida 27 por 9 e depois some 5.
+4 4
+6
+4
+3
+8
+Qual é o resultado de 18 - (6 + 3)?
+4 1
+9
+15
+12
+6
+Quanto é 7 vezes 0?
+3 3
+1
+7
+0
+Se um brinquedo custa R$25 e você paga com uma nota de R$50, quanto você recebe de troco?
+4 2
+R$15
+R$25
+R$20
+R$30
+Multiplique 8 por 3 e subtraia 4.
+4 3
+22
+24
+20
+28
+Qual é o próximo número na sequência: 12, 15, 18, 21, ...?
+5 2
+23
+24
+25
+27
+30
+Se você tiver 20 figurinhas e der 5 para um amigo, quantas você terá depois?
+4 2
+10
+15
+20
+25
+Qual é o resultado de 4 elevado à 3ª potência?
+4 3
+16
+7
+64
+12
+Resolva a equação 2x + 5 = 15.
+4 2
+x = 4
+x = 5
+x = 10
+x = 7
+Qual é a solução de 3(x - 2) = 9?
+4 1
+x = 5
+x = 3
+x = 2
+x = 4
+Qual é o valor de x na equação 4x - 7 = 3x + 5?
+4 3
+x = -12
+x = -5
+x = 12
+x = 5
+Resolva a equação log₂(x) = 3.
+4 4
+x = 2
+x = 6
+x = 27
+x = 8
+Qual é o próximo termo na sequência: 2, 6, 12, 20, ...?
+5 2
+26
+30
+36
+24
+42
+Encontre a solução para a equação ln(x) = 3.
+4 1
+x = e³
+x = 1/3
+x = 3e
+x = e
+Qual é a soma de 1/3 + 2/5?
+4 3
+5/8
+5/15
+11/15
+3/8
+Multiplique 2/3 por 4/5.
+4 2
+8/15
+6/15
+9/15
+10/15
+Qual é o resultado de 3/4 - 1/6?
+4 3
+1/12
+1/2
+7/12
+11/12
+Calcule 1/2 ÷ 3/4.
+4 1
+2/3
+3/8
+1/8
+4/3
+Qual é o valor de 5/6 + 1/4?
+4 3
+5/24
+3/4
+13/12
+9/8
+Simplifique a fração 8/12.
+4 1
+2/3
+4/6
+8/12
+3/4
+Qual é o resultado de 2/5 + 3/10?
+4 3
+5/10
+1/2
+7/10
+3/5
+Multiplique 3/8 por 2/7.
+4 3
+3/56
+6/15
+6/56
+6/21
+Qual é a diferença entre 7/8 e 1/4?
+4 4
+1/8
+1/2
+3/4
+5/8
+Calcule 2/3 ÷ 4/5.
+4 1
+5/6
+8/15
+15/8
+10/12
+Resolva a equação: 2x + 1/3 = 5/2.
+4 1
+x = 13/12
+x = 17/12
+x = 11/6
+x = 7/6
+Encontre o valor de x: 3/4x = 5/6.
+4 2
+x = 15/12
+x = 9/10
+x = 15/10
+x = 8/9
+Qual é o valor de x na equação 2x - 1/5 = 3/4?
+4 4
+x = 11/10
+x = 13/40
+x = 9/8
+x = 19/40
+Simplifique a expressão: (4/6) × (5/10) ÷ (2/3).
+4 2
+1/3
+1/2
+5/9
+2/3
+Qual é o maior oceano?
+5 3
+Oceano Atlântico
+Oceano Índico
+Oceano Pacífico
+Oceano Ártico
+Oceano Antártico
+Qual é o rio mais longo do mundo?
+5 1
+Rio Nilo
+Rio Amazonas
+Rio Yangtzé
+Rio Mississippi
+Rio Ganges
+Qual é o maior deserto do mundo?
+4 2
+Deserto de Atacama
+Deserto da Antártida
+Deserto do Saara
+Deserto do Kalahari
+Qual é a montanha mais alta do mundo?
+4 1
+Monte Everest
+Monte Kilimanjaro
+Monte McKinley
+Monte Fuji
+Qual é o país com a maior área territorial?
+5 1
+Rússia
+China
+Canadá
+Estados Unidos
+Brasil
+Qual é o canal artificial que conecta o Mar Vermelho ao Mar Mediterrâneo?
+4 2
+Canal do Panamá
+Canal de Suez
+Canal de Bering
+Canal da Mancha
+Qual é o país conhecido como "Terra do Sol Nascente"?
+4 1
+Japão
+Coreia do Sul
+China
+Tailândia
+Qual é o continente com a maior população?
+5 3
+África
+Europa
+Ásia
+América do Norte
+América do Sul
+Qual é a capital da França?
+4 1
+Paris
+Londres
+Roma
+Berlim
+Qual é o maior país da América do Sul?
+4 2
+Argentina
+Brasil
+Peru
+Colômbia
+Qual é a capital da Rússia?
+4 1
+Moscou
+São Petersburgo
+Kiev
+Minsk
+Qual é o maior lago de água doce do mundo em volume?
+4 1
+Lago Baikal
+Lago Vitória
+Lago Superior
+Lago Tanganica
+Qual é o país conhecido como "Terra dos Cangurus"?
+4 2
+Nova Zelândia
+Austrália
+Canadá
+África do Sul
+Qual é o nome do desfiladeiro cortado pelo rio Colorado nos Estados Unidos?
+4 3
+Bryce Canyon
+Death Valley
+Grand Canyon
+Yosemite Valley
+Qual é o país conhecido como "País das Mil Colinas"?
+4 3
+Quênia
+Uganda
+Ruanda
+Tanzânia
+Qual é o continente onde está localizada a Península Arábica?
+5 1
+Ásia
+África
+Europa
+América do Sul
+Oceania
+Qual é o ponto mais alto da África?
+4 1
+Monte Kilimanjaro
+Monte Elbrus
+Monte Aconcágua
+Monte Everest
+Qual é o nome do rio que corta a cidade de Nova York?
+4 2
+Rio Hudson
+Rio East
+Rio Delaware
+Rio Connecticut
+Qual é o país que é um arquipélago composto por mais de 17.000 ilhas?
+4 1
+Indonésia
+Filipinas
+Malásia
+Japão
+Qual é o deserto localizado na região sudoeste dos Estados Unidos e norte do México?
+4 3
+Deserto de Gobi
+Deserto do Saara
+Deserto de Sonora
+Deserto de Mojave
+Quem é o autor de "O Grande Gatsby"?
+4 1
+F. Scott Fitzgerald
+Ernest Hemingway
+Mark Twain
+John Steinbeck
+Quem escreveu "Dom Quixote"?
+4 2
+Machado de Assis
+Miguel de Cervantes
+Gabriel García Márquez
+Franz Kafka
+Qual é o autor de "1984"?
+4 1
+George Orwell
+Aldous Huxley
+Ray Bradbury
+J.R.R. Tolkien
+Qual é o romance escrito por J. D. Salinger?
+4 4
+"Orgulho e Preconceito"
+"Em Busca do Tempo Perdido"
+"Cem Anos de Solidão"
+"O Apanhador no Campo de Centeio"
+Quem é o autor de "O Pequeno Príncipe"?
+4 1
+Antoine de Saint-Exupéry
+Lewis Carroll
+Jules Verne
+Franz Kafka
+Qual é o autor de "Romeu e Julieta"?
+4 3
+Miguel de Cervantes
+Dante Alighieri
+William Shakespeare
+Virgínia Woolf
+Qual é a autora de "O Diário de Anne Frank"?
+4 1
+Anne Frank
+Agatha Christie
+Harper Lee
+Virginia Woolf
+Qual é o autor de "Crime e Castigo"?
+4 2
+Leo Tolstoy
+Fyodor Dostoevsky
+Anton Chekhov
+Vladimir Nabokov
+Qual é a obra que se passa numa realidade onde os livros foram proibidos?
+4 3
+"A Máquina do Tempo"
+"1984"
+"Fahrenheit 451"
+"Guerra e Paz"
+Quem escreveu "Cem anos de solidão"?
+4 3
+Machado de Assis
+Miguel de Cervantes
+Gabriel García Márquez
+Franz Kafka
+Qual obra narra a viagem de um capitão em busca de baleias brancas?
+4 1
+"Moby Dick"
+"A Ilha do Tesouro"
+"Vinte Mil Léguas Submarinas"
+"O Velho e o Mar"
+Qual é a obra que narra a jornada de Santiago, um pastor que busca realizar seu sonho pessoal?
+4 1
+"O Alquimista"
+"Cem Anos de Solidão"
+"Grande Sertão: Veredas"
+"Morte e Vida Severina"
+Quem é o autor de "O Senhor dos Anéis"?
+4 1
+J.R.R. Tolkien
+C.S. Lewis
+George R.R. Martin
+Terry Pratchett
+Qual é o título da obra que relata as aventuras de Huckleberry Finn e Tom Sawyer?
+4 2
+"As Aventuras de Tom Sawyer"
+"As Aventuras de Huckleberry Finn"
+"O Sol é Para Todos"
+"A Revolução dos Bichos"
+Qual é o autor de "A Metamorfose"?
+4 1
+Franz Kafka
+Albert Camus
+Fyodor Dostoevsky
+Hermann Hesse
+Qual é o título da obra que retrata a sociedade totalitária de Panem?
+4 2
+"Jogos Vorazes"
+"1984"
+"Admirável Mundo Novo"
+"A Revolução dos Bichos"
+Quem é a autora de "Harry Potter"?
+4 4
+Suzanne Collins
+Stephenie Meyer
+George R.R. Martin
+J.K. Rowling
+Qual é o autor de "O Retrato de Dorian Gray"?
+4 1
+Oscar Wilde
+William Shakespeare
+James Joyce
+F. Scott Fitzgerald
+Qual das cores abaixo não se encontra na logo do INF?
+4 3
+Vermelho
+Branco
+Azul
+Preto
+Qual a senha dos computadores dos laboratórios do INF?
+5 2
+"INFalunos"
+"aluno"
+"UFRGSINF"
+"UFRGS"
+"Santiago"

@@ -1,19 +1,13 @@
 #ifndef JANELA_H
 #define JANELA_H
 
+#include "tipos.h"
 #include <raylib.h>
 
-void IniciaJanela();
-void FechaJanela();
+void IniciaJanela(JANELA *janela);
+void FechaJanela(RenderTexture2D *render);
 
-void AtualizaFPS(int *monitor);
-
-void IniciaQuadro();
-void DesenhaQuadro();
-
-void TelaCheia();
-
-void CarregaTexturas(Texture2D texturas[]);
-void FechaTexturas(Texture2D texturas[]);
+void IniciaQuadro(JANELA *janela);
+void DesenhaQuadro(RenderTexture2D *render);
 
 #endif
