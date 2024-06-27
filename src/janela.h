@@ -8,6 +8,6 @@ void IniciaJanela(JANELA *janela);
 void FechaJanela(RenderTexture2D *render);
 
 void IniciaQuadro(JANELA *janela);
-void DesenhaQuadro(RenderTexture2D *render);
+void DesenhaQuadro(JANELA *j);
 
 #endif

@@ -116,7 +116,7 @@ void Desenha(JOGO jogo, JANELA *janela)
 		break;
 	}
 
-	DesenhaQuadro(&janela->render);
+	DesenhaQuadro(janela);
 }
 
 void VerificaDerrota(JOGO *jogo)

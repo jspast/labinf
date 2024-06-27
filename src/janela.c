@@ -10,6 +10,7 @@ void IniciaJanela(JANELA *janela)
 
 	// Configura a janela para ser redimensionável e com Vsync
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+	janela->escala = 1;
 
 	InitWindow(windowWidth, windowHeight, "Os Labirintos do INF"); // Inicialização da janela
 
@@ -53,10 +54,11 @@ void IniciaQuadro(JANELA *janela)
 	ClearBackground(COR_JOGO); // Limpa a tela e define cor de fundo
 }
 
-void DesenhaQuadro(RenderTexture2D *render)
+void DesenhaQuadro(JANELA *j)
 {
-	// Calcula o redimensionamento do framebuffer
-	float scale = MIN((float)GetRenderWidth()/RES_X, (float)GetRenderHeight()/RES_Y);
+	// Calcula o redimensionamento do framebuffer somente se mudou
+	if(IsWindowResized())
+		j->escala = MIN((float)GetRenderWidth()/RES_X, (float)GetRenderHeight()/RES_Y);
 
 	EndTextureMode();
 
@@ -64,9 +66,9 @@ void DesenhaQuadro(RenderTexture2D *render)
 	ClearBackground(BLACK); // Limpa a tela e define cor de fundo (fora da textura de renderização)
 
 	// Desenha a textura de renderização na tela, redimensionada corretamente
-	DrawTexturePro(render->texture, (Rectangle){ 0.0f, 0.0f, (float)render->texture.width, (float)-render->texture.height },
-				(Rectangle){ (GetRenderWidth() - ((float)RES_X*scale))*0.5f, (GetRenderHeight() - ((float)RES_Y*scale))*0.5f,
-				(float)RES_X*scale, (float)RES_Y*scale }, (Vector2){ 0, 0 }, 0.0f, WHITE);
+	DrawTexturePro(j->render.texture, (Rectangle){ 0.0f, 0.0f, (float)j->render.texture.width, (float)-j->render.texture.height },
+				(Rectangle){ (GetRenderWidth() - ((float)RES_X*j->escala))*0.5f, (GetRenderHeight() - ((float)RES_Y*j->escala))*0.5f,
+				(float)RES_X*j->escala, (float)RES_Y*j->escala }, (Vector2){ 0, 0 }, 0.0f, WHITE);
 
 	EndDrawing(); // Finaliza o ambiente de desenho na tela
 }

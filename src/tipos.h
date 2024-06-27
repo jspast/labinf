@@ -194,7 +194,7 @@ typedef struct{
 
 typedef struct{
 	RenderTexture2D render;
-	bool redimensionada;
+	float escala;
 } JANELA;
 
 #endif
