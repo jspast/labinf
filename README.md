@@ -1,10 +1,8 @@
 # Os Labirintos do INF
 
-Trabalho Prático Final - Semestre 2023/1
+Jogo de labirintos desenvolvido com [raylib](https://www.raylib.com/) em C na disciplina Algoritmos e Programação no semestre 2023/1.
 
-INF01202 - Algoritmos e Programação
-
-Prof. Santiago V. Ravelo
+Inspirado no jogo El Laberinto del Saber, de 1988.
 
 ## Como jogar
 
@@ -16,8 +14,6 @@ Versão para web disponível [aqui](https://jspast.github.io/labinf)
 
 ## Como compilar
 
-### Linux
-
 **Instale as ferramentas necessárias**:
 
 - **gcc**, **make** e **git**
@@ -25,16 +21,14 @@ Versão para web disponível [aqui](https://jspast.github.io/labinf)
 **Clone o repositório**
 ```bash
 git clone https://github.com/jspast/labinf
-cd Os-Labirintos-do-INF
+cd labinf
 ```
 
 **Compile para a plataforma desejada**
 
-- **Web**
+### Web
 
-Para compilar para a Web, é necessário instalar o **emscripten**
-
-As instruções estão disponíveis no [Github](https://github.com/emscripten-core/emsdk)
+Para compilar para a Web, é necessário instalar o [**emscripten**](https://github.com/emscripten-core/emsdk)
 
 Indique a pasta de instalação do emscripten (emsdk) após EMSDK_PATH=
 
@@ -44,7 +38,7 @@ make PLATFORM=PLATFORM_WEB EMSDK_PATH=caminho/para/emsdk
 
 O resultado da compilação estará em build/web/
 
-- **Desktop**
+### Desktop
 ```bash
 make
 ```
