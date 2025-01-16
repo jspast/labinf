@@ -9,7 +9,7 @@ Prof. Santiago V. Ravelo
 ## Como jogar
 
 ### Web
-Versão para web disponível [aqui](jspast.github.io/labinf)
+Versão para web disponível [aqui](https://jspast.github.io/labinf)
 
 ### Desktop
 É necessário compilar para o seu sistema
