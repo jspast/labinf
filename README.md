@@ -4,6 +4,8 @@ Jogo de labirintos desenvolvido com [raylib](https://www.raylib.com/) em C na di
 
 Inspirado no jogo El Laberinto del Saber, de 1988.
 
+![Screenshot](./screenshot.png)
+
 ## Como jogar
 
 ### Web
@@ -28,7 +30,7 @@ cd labinf
 
 ### Web
 
-Para compilar para a Web, é necessário instalar o [**emscripten**](https://github.com/emscripten-core/emsdk)
+Para compilar para a Web, é necessário instalar o [**emscripten**](https://emscripten.org/)
 
 Indique a pasta de instalação do emscripten (emsdk) após EMSDK_PATH=
 
@@ -44,3 +46,8 @@ make
 ```
 
 O resultado da compilação estará em build/desktop/
+
+## Bibliotecas usadas
+
+- [raylib](https://www.raylib.com/)
+- [emscripten](https://emscripten.org/)
